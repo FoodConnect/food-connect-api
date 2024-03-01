@@ -52,15 +52,50 @@ and install Django and Django REST Framework with
 pip install django djangorestframework
 ```
 
-### Usage
-
-To start a local server, run the following command.
+as well as the django-cors-headers dependency with
 
 ```
-python3 manage.py runserver 8080
+pip install django-cors-headers
 ```
 
 ### Connecting to PostgreSQL Database
+
+Install PostgreSQL with Homebrew with
+
+```
+brew install postgresql
+```
+
+then start the the PostgreSQL Service with
+
+```
+brew services start postgresql
+```
+
+Create a root user by logging into the PostgreSQL service with
+
+```
+psql postgres
+```
+
+and creating user credentials with
+
+```
+CREATE ROLE yourNewUsername WITH LOGIN PASSWORD ‘yourpassword’;
+ALTER ROLE yourNewUsername CREATEDB;
+```
+
+Then, create your database with
+
+```
+CREATE DATABASE your_database_name;
+```
+
+and quit the session with
+
+```
+\q
+```
 
 To link your database to a postgresql database, first install 'psycopg2' module in your virtual environment to get Python to operate with Postgres:
 
@@ -86,6 +121,14 @@ Run the following commands to execute migrations:
 ```
 python3.11 manage.py makemigrations
 python3.11 manage.py migrate
+```
+
+### Usage
+
+To start a local server, run the following command.
+
+```
+python3 manage.py runserver 8080
 ```
 
 ## Authors
