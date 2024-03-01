@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'food_connect_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'food-connect-api',
+        'NAME': 'food_connect_api_db',
         'HOST': 'localhost',  # Or your database host
         'PORT': '',            # Leave it blank for default port
     }
