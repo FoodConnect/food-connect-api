@@ -85,5 +85,4 @@ class DonationCategory(models.Model):
 class ClaimedInventory(models.Model):
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
     claimed_quantity = models.IntegerField()
-    claimed_at = models.DateTimeField(default=timezone.now)
-    
+    claimed_at = models.DateTimeField(auto_now_add=True)
