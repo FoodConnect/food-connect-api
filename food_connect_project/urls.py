@@ -20,7 +20,7 @@ from food_connect_app.views import UserViewSet, CharityViewSet, DonorViewSet, Do
 
 #authentication
 from django.urls import path
-from .views import GoogleAuthView, GoogleAuthCallbackView
+from food_connect_app.views import GoogleAuthView, GoogleAuthCallbackView
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
