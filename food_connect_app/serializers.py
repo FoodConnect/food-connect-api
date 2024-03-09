@@ -8,7 +8,6 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['created_at', 'updated_at', 'id']
 
 class CharitySerializer(serializers.ModelSerializer):
-
   class Meta:
       model = Charity
       fields = '__all__'
@@ -51,4 +50,9 @@ class CategorySerializer(serializers.ModelSerializer):
 class DonationCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationCategory
+        fields = '__all__'
+
+class ClaimedInventory(serializers.ModelSerializer):
+    class Meta:
+        model = ClaimedInventory
         fields = '__all__'

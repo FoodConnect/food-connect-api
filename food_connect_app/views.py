@@ -3,9 +3,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory
+from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory, ClaimedInventory
 
-from .serializers import UserSerializer, CharitySerializer, DonorSerializer, DonationSerializer, CartSerializer, CartedDonationSerializer, OrderSerializer, CategorySerializer, DonationCategorySerializer
+from .serializers import UserSerializer, CharitySerializer, DonorSerializer, DonationSerializer, CartSerializer, CartedDonationSerializer, OrderSerializer, CategorySerializer, DonationCategorySerializer, ClaimedInventorySerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -43,3 +43,6 @@ class DonationCategoryViewSet(viewsets.ModelViewSet):
     queryset = DonationCategory.objects.all()
     serializer_class = DonationCategorySerializer
 
+class ClaimedInventoryViewSet(viewsets.ModelViewSet):
+    queryset = ClaimedInventory.objects.all()
+    serializer_class = ClaimedInventorySerializer

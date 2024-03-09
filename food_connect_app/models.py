@@ -39,7 +39,7 @@ class Donation(models.Model):
     title = models.CharField(max_length=30)
     image_data = models.CharField(max_length=255)
     description = models.TextField()
-    inventory = models.IntegerField()
+    total_inventory = models.IntegerField()
     pick_up_deadline = models.DateTimeField()
     address = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
@@ -82,3 +82,8 @@ class DonationCategory(models.Model):
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+class ClaimedInventory(models.Model):
+    donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
+    claimed_quantity = models.IntegerField()
+    claimed_at = models.DateTimeField(default=timezone.now)
+    
