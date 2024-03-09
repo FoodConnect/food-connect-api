@@ -5,12 +5,17 @@ class UserRole(Enum):
     DONOR = 'donor'
     CHARITY = 'charity'
 
+class CartStatus(Enum):
+    CARTED = 'carted'
+    ORDERED = 'ordered'
+
 class User(models.Model):
     id = models.AutoField(primary_key=True)
     business_name = models.CharField(max_length=255)
     role = models.CharField(max_length=50, choices=[(role.value, role.name) for role in UserRole])
     ein_number = models.CharField(max_length=255)
     image_data = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
     zipcode = models.CharField(max_length=10)
@@ -31,10 +36,15 @@ class Donor(models.Model):
 class Donation(models.Model):
     id = models.AutoField(primary_key=True)
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE)
+    title = models.CharField(max_length=30)
     image_data = models.CharField(max_length=255)
     description = models.TextField()
     inventory = models.IntegerField()
     pick_up_deadline = models.DateTimeField()
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    zipcode = models.CharField(max_length=10)
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -43,7 +53,7 @@ class Cart(models.Model):
     id = models.AutoField(primary_key=True)
     charity = models.ForeignKey(Charity, on_delete=models.CASCADE)
     quantity = models.IntegerField()
-    status = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=[(status.value, status.name.title()) for status in CartStatus])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
