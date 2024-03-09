@@ -92,6 +92,9 @@ DATABASES = {
     }
 }
 
+GOOGLE_OAUTH2_CLIENT_ID = '3117225057-u53j554nca5du0jqk1kvh6ukqt55j1f0.apps.googleusercontent.com'
+GOOGLE_OAUTH2_CLIENT_SECRET = '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'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
