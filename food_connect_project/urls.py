@@ -28,7 +28,7 @@ router.register(r'carted_donations', CartedDonationViewSet)
 router.register(r'orders', OrderViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'donation_categories', DonationCategoryViewSet)
-router.register(r'claimed_inventory', ClaimedInventoryViewSet)
+router.register(r'claimed_inventories', ClaimedInventoryViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
