@@ -16,7 +16,7 @@ class CharityViewSet(viewsets.ModelViewSet):
     serializer_class = CharitySerializer
 
 class DonorViewSet(viewsets.ModelViewSet):
-    queryset = Charity.objects.select_related('user').all()
+    queryset = Donor.objects.select_related('user').all()
     serializer_class = DonorSerializer
 
 class DonationViewSet(viewsets.ModelViewSet):
