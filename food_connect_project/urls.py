@@ -18,9 +18,9 @@ from django.urls import path, include
 from rest_framework import routers
 from food_connect_app.views import UserViewSet, CharityViewSet, DonorViewSet, DonationViewSet, CartViewSet, CartedDonationViewSet, OrderViewSet, CategoryViewSet, DonationCategoryViewSet
 
-#authentication
-from django.urls import path
-from food_connect_app.views import GoogleAuthView, GoogleAuthCallbackView
+#oauth authentication
+# from django.urls import path
+# from food_connect_app.views import GoogleAuthView, GoogleAuthCallbackView
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -35,7 +35,9 @@ router.register(r'donation_categories', DonationCategoryViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('auth/google', GoogleAuthView.as_view(), name='google-auth'),
-    path('auth/google/callback', GoogleAuthCallbackView.as_view(), name='google-auth-callback'),
+
+    # google oauth paths
+    # path('auth/google', GoogleAuthView.as_view(), name='google-auth'),
+    # path('auth/google/callback', GoogleAuthCallbackView.as_view(), name='google-auth-callback'), 
 ]
 
