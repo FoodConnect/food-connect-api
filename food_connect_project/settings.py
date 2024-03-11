@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#6*nx892*qk1z2mg$q6@r6d_2ehp6r!l6z&!9qhi)7*-os@()%'
+SECRET_KEY = 'SECRET_KEY'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -91,6 +91,9 @@ DATABASES = {
         'PORT': '',            # Leave it blank for default port
     }
 }
+
+GOOGLE_OAUTH2_CLIENT_ID = 'GOOGLE_OAUTH2_CLIENT_ID'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'GOOGLE_OAUTH2_CLIENT_SECRET'
 
 
 # Password validation
