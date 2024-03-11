@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory, ClaimedInventory
+from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -50,9 +50,4 @@ class CategorySerializer(serializers.ModelSerializer):
 class DonationCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationCategory
-        fields = '__all__'
-
-class ClaimedInventorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ClaimedInventory
         fields = '__all__'

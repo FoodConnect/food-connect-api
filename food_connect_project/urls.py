@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.urls import path, include
 from rest_framework import routers
-from food_connect_app.views import UserViewSet, CharityViewSet, DonorViewSet, DonationViewSet, CartViewSet, CartedDonationViewSet, OrderViewSet, CategoryViewSet, DonationCategoryViewSet, ClaimedInventoryViewSet
+from food_connect_app.views import UserViewSet, CharityViewSet, DonorViewSet, DonationViewSet, CartViewSet, CartedDonationViewSet, OrderViewSet, CategoryViewSet, DonationCategoryViewSet
 
 #authentication
 from django.urls import path
@@ -32,7 +32,6 @@ router.register(r'carted_donations', CartedDonationViewSet)
 router.register(r'orders', OrderViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'donation_categories', DonationCategoryViewSet)
-router.register(r'claimed_inventories', ClaimedInventoryViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

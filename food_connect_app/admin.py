@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory, ClaimedInventory
+from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory
 
 admin.site.register(User)
 admin.site.register(Charity)
@@ -10,4 +10,3 @@ admin.site.register(CartedDonation)
 admin.site.register(Order)
 admin.site.register(Category)
 admin.site.register(DonationCategory)
-admin.site.register(ClaimedInventory)

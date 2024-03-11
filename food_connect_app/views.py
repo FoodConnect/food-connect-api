@@ -3,9 +3,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory, ClaimedInventory
+from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory
 
-from .serializers import UserSerializer, CharitySerializer, DonorSerializer, DonationSerializer, CartSerializer, CartedDonationSerializer, OrderSerializer, CategorySerializer, DonationCategorySerializer, ClaimedInventorySerializer
+from .serializers import UserSerializer, CharitySerializer, DonorSerializer, DonationSerializer, CartSerializer, CartedDonationSerializer, OrderSerializer, CategorySerializer, DonationCategorySerializer
 
 #authentication
 from rest_framework.views import APIView
@@ -51,10 +51,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class DonationCategoryViewSet(viewsets.ModelViewSet):
     queryset = DonationCategory.objects.all()
     serializer_class = DonationCategorySerializer
-
-class ClaimedInventoryViewSet(viewsets.ModelViewSet):
-    queryset = ClaimedInventory.objects.all()
-    serializer_class = ClaimedInventorySerializer
 
 # authentication
 class GoogleAuthView(APIView):
