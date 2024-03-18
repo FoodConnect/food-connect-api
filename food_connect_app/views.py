@@ -43,7 +43,7 @@ class CartViewSet(viewsets.ModelViewSet):
     def add_to_cart(self, request, pk=None):
         cart = self.get_object()
         donation_id = request.data.get('donation_id')
-        quantity = request.data.get('quantity', 1)
+        quantity = request.data.get('quantity', 0)
 
         # Check if the donation is already in the cart
         try:
@@ -54,24 +54,31 @@ class CartViewSet(viewsets.ModelViewSet):
             carted_donation = CartedDonation.objects.create(cart=cart, donation_id=donation_id, quantity=quantity)
 
         return Response({'message': 'Item added to cart'}, status=status.HTTP_200_OK)
-
+    
     @action(detail=True, methods=['post'])
     def remove_from_cart(self, request, pk=None):
         cart = self.get_object()
         donation_id = request.data.get('donation_id')
 
         try:
-            carted_donation = cart.carted_donations.get(donation__id=donation_id)
+        # Retrieve the carted donation associated with the specified donation_id
+            carted_donation = CartedDonation.objects.get(cart=cart, donation_id=donation_id)
+        
             if carted_donation.quantity > 1:
                 carted_donation.quantity -= 1
                 carted_donation.save()
             else:
                 carted_donation.delete()
-        except CartedDonation.DoesNotExist:
-            pass
+            
+            # Optionally, refresh the cart to reflect changes in the database
+            cart.refresh_from_db()
 
-        serializer = CartSerializer(cart)
-        return Response(serializer.data)
+            serializer = CartSerializer(cart)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except CartedDonation.DoesNotExist:
+        # If the carted donation does not exist, return an error response
+            return Response({'error': 'Carted donation not found'}, status=status.HTTP_404_NOT_FOUND)
 
 class CartedDonationViewSet(viewsets.ModelViewSet):
     queryset = CartedDonation.objects.all()
