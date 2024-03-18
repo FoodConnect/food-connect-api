@@ -44,12 +44,34 @@ class CartViewSet(viewsets.ModelViewSet):
         cart = self.get_object()
         donation_id = request.data.get('donation_id')
         quantity = request.data.get('quantity', 1)
-        donation = Donation.objects.get(pk=donation_id)
-        if donation.stock < quantity:
-            return Response({'error': 'Not enough stock available'}, status=status.HTTP_400_BAD_REQUEST)
-        carted_donation = CartedDonation(cart=cart, donation=donation, quantity=quantity)
-        carted_donation.save()
-        return Response({'message': 'Item added to cart'}, status=status.HTTP_200_OK)
+
+        try:
+            carted_donation = cart.carted_donations.get(donation__id=donation_id)
+            carted_donation.quantity += int(quantity)
+            carted_donation.save()
+        except CartedDonation.DoesNotExist:
+            carted_donation = CartedDonation.objects.create(cart=cart, donation_id=donation_id, quantity=quantity)
+
+        serializer = CartSerializer(cart)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def remove_from_cart(self, request, pk=None):
+        cart = self.get_object()
+        donation_id = request.data.get('donation_id')
+
+        try:
+            carted_donation = cart.carted_donations.get(donation__id=donation_id)
+            if carted_donation.quantity > 1:
+                carted_donation.quantity -= 1
+                carted_donation.save()
+            else:
+                carted_donation.delete()
+        except CartedDonation.DoesNotExist:
+            pass
+
+        serializer = CartSerializer(cart)
+        return Response(serializer.data)
 
 class CartedDonationViewSet(viewsets.ModelViewSet):
     queryset = CartedDonation.objects.all()
@@ -65,10 +87,29 @@ class OrderViewSet(viewsets.ModelViewSet):
         carted_donations = CartedDonation.objects.filter(cart=cart)
         if not carted_donations.exists():
             return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Calculate total inventory changes
+        total_inventory_changes = {}
+        for carted_donation in carted_donations:
+            donation = carted_donation.donation
+            if donation.id not in total_inventory_changes:
+                total_inventory_changes[donation.id] = carted_donation.quantity
+            else:
+                total_inventory_changes[donation.id] += carted_donation.quantity
+        
+        # Update inventory levels for each donation
+        for donation_id, quantity in total_inventory_changes.items():
+            donation = Donation.objects.get(pk=donation_id)
+            donation.claimed_inventory += quantity
+            donation.remaining_inventory -= quantity
+            donation.save()
+
+        # Create the order
         order = Order.objects.create(status='Pending')
         for carted_donation in carted_donations:
             order.carted_donations.add(carted_donation)
         carted_donations.delete()
+
         return Response({'message': 'Order created successfully'}, status=status.HTTP_201_CREATED)
 
 class CategoryViewSet(viewsets.ModelViewSet):
