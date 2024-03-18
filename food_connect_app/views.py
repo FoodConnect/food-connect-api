@@ -45,15 +45,30 @@ class CartViewSet(viewsets.ModelViewSet):
         donation_id = request.data.get('donation_id')
         quantity = request.data.get('quantity', 0)
 
-        # Check if the donation is already in the cart
         try:
-            carted_donation = CartedDonation.objects.get(cart=cart, donation_id=donation_id)
-            carted_donation.quantity += int(quantity)
-            carted_donation.save()
-        except CartedDonation.DoesNotExist:
-            carted_donation = CartedDonation.objects.create(cart=cart, donation_id=donation_id, quantity=quantity)
+            # Retrieve donation information
+            donation = Donation.objects.get(pk=donation_id)
+            total_inventory = donation.total_inventory
+            claimed_inventory = donation.claimed_inventory
 
-        return Response({'message': 'Item added to cart'}, status=status.HTTP_200_OK)
+            # Calculate available inventory
+            available_inventory = total_inventory - claimed_inventory
+
+            # Check if requested quantity exceeds available inventory
+            if quantity > available_inventory:
+                return Response({'error': 'Not enough stock available'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the donation is already in the cart
+            try:
+                carted_donation = CartedDonation.objects.get(cart=cart, donation_id=donation_id)
+                carted_donation.quantity += int(quantity)
+                carted_donation.save()
+            except CartedDonation.DoesNotExist:
+                carted_donation = CartedDonation.objects.create(cart=cart, donation_id=donation_id, quantity=quantity)
+
+            return Response({'message': 'Item added to cart'}, status=status.HTTP_200_OK)
+        except Donation.DoesNotExist:
+            return Response({'error': 'Donation not found'}, status=status.HTTP_404_NOT_FOUND)
     
     @action(detail=True, methods=['post'])
     def remove_from_cart(self, request, pk=None):

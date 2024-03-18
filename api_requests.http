@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "donation_id": 1,
-    "quantity": 5
+    "quantity": 11
 }
 
 ### 
@@ -13,4 +13,13 @@ Content-Type: application/json
 
 {
     "donation_id": 1
+}
+
+###
+
+PATCH http://localhost:8080/donations/1/
+Content-Type: application/json
+
+{
+    "total_inventory": 10
 }
