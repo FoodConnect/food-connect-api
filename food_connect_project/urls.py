@@ -35,9 +35,14 @@ router.register(r'donation_categories', DonationCategoryViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path("__debug__/", include("debug_toolbar.urls")),
+]
+
+
+
 
     # google oauth paths
     # path('auth/google', GoogleAuthView.as_view(), name='google-auth'),
     # path('auth/google/callback', GoogleAuthCallbackView.as_view(), name='google-auth-callback'), 
-]
+
 
