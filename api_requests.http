@@ -1,0 +1,7 @@
+POST http://localhost:8080/carts/1/add_to_cart/
+Content-Type: application/json
+
+{
+    "donation_id": 1,
+    "quantity": 1
+}

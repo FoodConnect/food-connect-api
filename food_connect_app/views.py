@@ -45,15 +45,15 @@ class CartViewSet(viewsets.ModelViewSet):
         donation_id = request.data.get('donation_id')
         quantity = request.data.get('quantity', 1)
 
+        # Check if the donation is already in the cart
         try:
-            carted_donation = cart.carted_donations.get(donation__id=donation_id)
+            carted_donation = CartedDonation.objects.get(cart=cart, donation_id=donation_id)
             carted_donation.quantity += int(quantity)
             carted_donation.save()
         except CartedDonation.DoesNotExist:
             carted_donation = CartedDonation.objects.create(cart=cart, donation_id=donation_id, quantity=quantity)
 
-        serializer = CartSerializer(cart)
-        return Response(serializer.data)
+        return Response({'message': 'Item added to cart'}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def remove_from_cart(self, request, pk=None):
