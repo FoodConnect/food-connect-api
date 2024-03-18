@@ -54,24 +54,23 @@ class Donation(models.Model):
 class Cart(models.Model):
     id = models.AutoField(primary_key=True)
     charity = models.ForeignKey(Charity, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
     status = models.CharField(max_length=20, choices=[(status.value, status.name.title()) for status in CartStatus])
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Order(models.Model):
+    id = models.AutoField(primary_key=True)
+    charity = models.ForeignKey(Charity, on_delete=models.CASCADE)
+    donations = models.ManyToManyField(Donation, through='CartedDonation')
+    donation_receipt = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
 class CartedDonation(models.Model):
     id = models.AutoField(primary_key=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-
-class Order(models.Model):
-    id = models.AutoField(primary_key=True)
-    donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
-    charity = models.ForeignKey(Charity, on_delete=models.CASCADE)
-    donation_receipt = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)

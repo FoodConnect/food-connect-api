@@ -31,14 +31,13 @@ class CartedDonationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CartSerializer(serializers.ModelSerializer):
-    carted_donations = CartedDonationSerializer(many=True)  # Nested serializer for CartedDonation
     class Meta:
         model = Cart
         fields = '__all__'
         read_only_fields = ['created_at', 'updated_at', 'id']
 
 class OrderSerializer(serializers.ModelSerializer):
-    carted_donations = CartedDonationSerializer(many=True)  # Nested serializer for CartedDonation 
+    donations = DonationSerializer(many=True)
     class Meta:
         model = Order
         fields = '__all__'
