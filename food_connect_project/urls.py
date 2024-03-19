@@ -36,7 +36,8 @@ router.register(r'donation_categories', DonationCategoryViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('carts/<int:pk>/add_to_cart/', CartViewSet.as_view({'post': 'add_to_cart'}), name='add_to_cart'),
-    path('orders/create_order/', OrderViewSet.as_view({'post': 'create_order'}), name='create_order'),
+    path('carts/<int:pk>/remove_from_cart/', CartViewSet.as_view({'post': 'remove_from_cart'}), name='remove_from_cart'),
+    path('cart/<int:pk>/checkout/', CartViewSet.as_view({'post': 'checkout'}), name='cart_checkout'),
 ]
 
     # google oauth paths

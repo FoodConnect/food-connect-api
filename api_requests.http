@@ -23,3 +23,13 @@ Content-Type: application/json
 {
     "total_inventory": 10
 }
+
+###
+
+POST http://localhost:8080/orders/create_order/
+Content-Type: application/json
+
+{
+    "donation_id": 1,
+    "quantity": 1
+}
