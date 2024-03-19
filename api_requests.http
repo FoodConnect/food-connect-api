@@ -26,10 +26,10 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/orders/create_order/
+POST http://localhost:8080/carts/1/checkout/
 Content-Type: application/json
 
 {
-    "donation_id": 1,
-    "quantity": 1
+  "charity_id": 1,
+  "cart_id": 1
 }

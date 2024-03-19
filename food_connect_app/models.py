@@ -71,6 +71,7 @@ class CartedDonation(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
