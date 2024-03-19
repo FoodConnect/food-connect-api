@@ -126,37 +126,6 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
-    @action(detail=True, methods=['post'])
-    def create_order(self, request, pk=None):
-        cart = Cart.objects.get(pk=pk)
-        carted_donations = CartedDonation.objects.filter(cart=cart)
-        if not carted_donations.exists():
-            return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # Calculate total inventory changes
-        total_inventory_changes = {}
-        for carted_donation in carted_donations:
-            donation = carted_donation.donation
-            if donation.id not in total_inventory_changes:
-                total_inventory_changes[donation.id] = carted_donation.quantity
-            else:
-                total_inventory_changes[donation.id] += carted_donation.quantity
-        
-        # Update inventory levels for each donation
-        for donation_id, quantity in total_inventory_changes.items():
-            donation = Donation.objects.get(pk=donation_id)
-            donation.claimed_inventory += quantity
-            donation.remaining_inventory -= quantity
-            donation.save()
-
-        # Create the order
-        order = Order.objects.create(status='Pending')
-        for carted_donation in carted_donations:
-            order.carted_donations.add(carted_donation)
-        carted_donations.delete()
-
-        return Response({'message': 'Order created successfully'}, status=status.HTTP_201_CREATED)
-
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer

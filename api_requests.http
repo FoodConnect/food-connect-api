@@ -31,5 +31,5 @@ Content-Type: application/json
 
 {
   "charity_id": 1,
-  "cart_id": 1
+  "cart_id": 1,
 }
