@@ -95,6 +95,29 @@ class CartViewSet(viewsets.ModelViewSet):
         # If the carted donation does not exist, return an error response
             return Response({'error': 'Carted donation not found'}, status=status.HTTP_404_NOT_FOUND)
 
+    @action(detail=True, methods=['post'])
+    def checkout(self, request, pk=None):
+        cart = self.get_object()
+
+        # Create an order
+        order = Order.objects.create(charity=cart.charity)
+
+        # Update cart status to "ordered"
+        cart.status = "ordered"
+        cart.save()
+
+        # Reduce remaining_inventory on the appropriate Donation models
+        carted_donations = CartedDonation.objects.filter(cart=cart)
+        for carted_donation in carted_donations:
+            donation = carted_donation.donation
+            quantity = carted_donation.quantity
+
+            # Reduce remaining_inventory
+            donation.remaining_inventory -= quantity
+            donation.save()
+
+        return Response({'message': 'Order processed successfully'}, status=status.HTTP_200_OK)
+
 class CartedDonationViewSet(viewsets.ModelViewSet):
     queryset = CartedDonation.objects.all()
     serializer_class = CartedDonationSerializer

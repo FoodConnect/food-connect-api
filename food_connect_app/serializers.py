@@ -43,17 +43,6 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['created_at', 'updated_at', 'id']
 
-    def create(self, validated_data):
-        carted_donations_data = validated_data.pop('carted_donations', [])  # Extract carted donations data
-        order = Order.objects.create(**validated_data)  # Create the order
-
-        for carted_donation_data in carted_donations_data:
-            donation_data = carted_donation_data.pop('donation')  # Extract donation data
-            donation = Donation.objects.create(**donation_data)  # Create the associated donation
-            CartedDonation.objects.create(order=order, donation=donation, **carted_donation_data)  # Create the CartedDonation
-
-        return order
-
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
