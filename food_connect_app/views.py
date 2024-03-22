@@ -3,8 +3,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 
-# for carting processes
+# for carting & order processes
 from rest_framework.decorators import action
+from django.db import transaction
 
 from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory
 
@@ -18,6 +19,15 @@ from .serializers import UserSerializer, CharitySerializer, DonorSerializer, Don
 # from django.shortcuts import redirect
 # from google_auth_oauthlib.flow import Flow
 # from .authentication import GoogleAuthentication
+
+def generate_receipt(order):
+    receipt_content = ""
+    carted_donations = CartedDonation.objects.filter(order=order)
+    for carted_donation in carted_donations:
+        donation = carted_donation.donation
+        quantity = carted_donation.quantity
+        receipt_content += f"Donation: {donation.title}, Quantity: {quantity}\n"
+    return receipt_content
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -39,13 +49,14 @@ class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
 
-    @action(detail=True, methods=['post'])
-    def add_to_cart(self, request, pk=None):
-        cart = self.get_object()
+    @action(detail=False, methods=['post'])
+    def add_to_cart(self, request):
+        user = request.user
         donation_id = request.data.get('donation_id')
         quantity = request.data.get('quantity', 0)
 
         try:
+
             # Retrieve donation information
             donation = Donation.objects.get(pk=donation_id)
             total_inventory = donation.total_inventory
@@ -58,13 +69,17 @@ class CartViewSet(viewsets.ModelViewSet):
             if quantity > available_inventory:
                 return Response({'error': 'Not enough stock available'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if the donation is already in the cart
-            try:
-                carted_donation = CartedDonation.objects.get(cart=cart, donation_id=donation_id)
+            # Find or create a cart for the user
+            cart = Cart.objects.filter(charity__user=user, status=CartStatus.CARTED.value).first()
+            if not cart:
+                charity = Charity.objects.get(user=user)
+                cart = Cart.objects.create(charity=charity, status=CartStatus.CARTED.value)
+
+            # Add the donation to the cart
+            carted_donation, created = CartedDonation.objects.get_or_create(cart=cart, donation=donation)
+            if not created:
                 carted_donation.quantity += int(quantity)
                 carted_donation.save()
-            except CartedDonation.DoesNotExist:
-                carted_donation = CartedDonation.objects.create(cart=cart, donation_id=donation_id, quantity=quantity)
 
             return Response({'message': 'Item added to cart'}, status=status.HTTP_200_OK)
         except Donation.DoesNotExist:
@@ -96,6 +111,7 @@ class CartViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Carted donation not found'}, status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=True, methods=['post'])
+    @transaction.atomic  # Use atomic transaction to ensure consistency
     def checkout(self, request, pk=None):
         cart = self.get_object()
 
@@ -103,7 +119,7 @@ class CartViewSet(viewsets.ModelViewSet):
         order = Order.objects.create(charity=cart.charity)
 
         # Update cart status to "ordered"
-        cart.status = "ordered"
+        cart.status = CartStatus.ORDERED.value  # Use enum value directly
         cart.save()
 
         # Reduce remaining_inventory on the appropriate Donation models
@@ -115,6 +131,11 @@ class CartViewSet(viewsets.ModelViewSet):
             # Reduce remaining_inventory
             donation.remaining_inventory -= quantity
             donation.save()
+
+        # Generate receipt and store it in the order
+        receipt_content = generate_receipt(order)
+        order.donation_receipt = receipt_content
+        order.save()
 
         return Response({'message': 'Order processed successfully'}, status=status.HTTP_200_OK)
 
