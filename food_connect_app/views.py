@@ -6,8 +6,9 @@ from rest_framework import status
 # for carting & order processes
 from rest_framework.decorators import action
 from django.db import transaction
+from django.http import JsonResponse
 
-from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory
+from .models import User, Charity, Donor, Donation, Cart, CartStatus, CartedDonation, Order, Category, DonationCategory
 
 from .serializers import UserSerializer, CharitySerializer, DonorSerializer, DonationSerializer, CartSerializer, CartedDonationSerializer, OrderSerializer, CategorySerializer, DonationCategorySerializer
 
@@ -51,12 +52,13 @@ class CartViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def add_to_cart(self, request):
-        user = request.user
+        
+        user_id = 4  
+        
         donation_id = request.data.get('donation_id')
         quantity = request.data.get('quantity', 0)
 
         try:
-
             # Retrieve donation information
             donation = Donation.objects.get(pk=donation_id)
             total_inventory = donation.total_inventory
@@ -67,12 +69,13 @@ class CartViewSet(viewsets.ModelViewSet):
 
             # Check if requested quantity exceeds available inventory
             if quantity > available_inventory:
-                return Response({'error': 'Not enough stock available'}, status=status.HTTP_400_BAD_REQUEST)
+                return JsonResponse({'error': 'Not enough stock available'}, status=status.HTTP_400_BAD_REQUEST)
 
             # Find or create a cart for the user
-            cart = Cart.objects.filter(charity__user=user, status=CartStatus.CARTED.value).first()
+            cart = Cart.objects.filter(charity__user_id=user_id, status=CartStatus.CARTED.value).first()
             if not cart:
-                charity = Charity.objects.get(user=user)
+                
+                charity = Charity.objects.get(user_id=user_id)
                 cart = Cart.objects.create(charity=charity, status=CartStatus.CARTED.value)
 
             # Add the donation to the cart
@@ -81,9 +84,9 @@ class CartViewSet(viewsets.ModelViewSet):
                 carted_donation.quantity += int(quantity)
                 carted_donation.save()
 
-            return Response({'message': 'Item added to cart'}, status=status.HTTP_200_OK)
+            return JsonResponse({'message': 'Item added to cart'}, status=status.HTTP_200_OK)
         except Donation.DoesNotExist:
-            return Response({'error': 'Donation not found'}, status=status.HTTP_404_NOT_FOUND)
+            return JsonResponse({'error': 'Donation not found'}, status=status.HTTP_404_NOT_FOUND)
     
     @action(detail=True, methods=['post'])
     def remove_from_cart(self, request, pk=None):
