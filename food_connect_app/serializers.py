@@ -24,18 +24,20 @@ class DonationSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['created_at', 'updated_at', 'id']
 
+class CartedDonationSerializer(serializers.ModelSerializer):
+    donation = DonationSerializer() # Nested serializer for Donation
+    class Meta:
+        model = CartedDonation
+        fields = '__all__'
+
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = '__all__'
         read_only_fields = ['created_at', 'updated_at', 'id']
 
-class CartedDonationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CartedDonation
-        fields = '__all__'
-
 class OrderSerializer(serializers.ModelSerializer):
+    donations = DonationSerializer(many=True)
     class Meta:
         model = Order
         fields = '__all__'

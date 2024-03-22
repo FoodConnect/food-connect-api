@@ -1,0 +1,35 @@
+POST http://localhost:8080/carts/add_to_cart/
+Content-Type: application/json
+
+{
+    "donation_id": 1,
+    "quantity": 2
+}
+
+### 
+
+POST http://localhost:8080/carts/1/remove_from_cart/
+Content-Type: application/json
+
+{
+    "donation_id": 1
+}
+
+###
+
+PATCH http://localhost:8080/donations/1/
+Content-Type: application/json
+
+{
+    "total_inventory": 10
+}
+
+###
+
+POST http://localhost:8080/carts/1/checkout/
+Content-Type: application/json
+
+{
+  "charity_id": 1,
+  "cart_id": 1,
+}

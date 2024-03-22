@@ -35,9 +35,13 @@ router.register(r'donation_categories', DonationCategoryViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('carts/add_to_cart/', CartViewSet.as_view({'post': 'add_to_cart'}), name='add_to_cart'),
+    path('carts/<int:pk>/remove_from_cart/', CartViewSet.as_view({'post': 'remove_from_cart'}), name='remove_from_cart'),
+    path('carts/<int:pk>/checkout/', CartViewSet.as_view({'post': 'checkout'}), name='cart_checkout'),
+]
 
     # google oauth paths
     # path('auth/google', GoogleAuthView.as_view(), name='google-auth'),
     # path('auth/google/callback', GoogleAuthCallbackView.as_view(), name='google-auth-callback'), 
-]
+
 

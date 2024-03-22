@@ -3,7 +3,12 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order, Category, DonationCategory
+# for carting & order processes
+from rest_framework.decorators import action
+from django.db import transaction
+from django.http import JsonResponse
+
+from .models import User, Charity, Donor, Donation, Cart, CartStatus, CartedDonation, Order, Category, DonationCategory
 
 from .serializers import UserSerializer, CharitySerializer, DonorSerializer, DonationSerializer, CartSerializer, CartedDonationSerializer, OrderSerializer, CategorySerializer, DonationCategorySerializer
 
@@ -15,6 +20,15 @@ from .serializers import UserSerializer, CharitySerializer, DonorSerializer, Don
 # from django.shortcuts import redirect
 # from google_auth_oauthlib.flow import Flow
 # from .authentication import GoogleAuthentication
+
+def generate_receipt(order):
+    receipt_content = ""
+    carted_donations = CartedDonation.objects.filter(order=order)
+    for carted_donation in carted_donations:
+        donation = carted_donation.donation
+        quantity = carted_donation.quantity
+        receipt_content += f"Donation: {donation.title}, Quantity: {quantity}\n"
+    return receipt_content
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -35,6 +49,98 @@ class DonationViewSet(viewsets.ModelViewSet):
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
+
+    @action(detail=False, methods=['post'])
+    def add_to_cart(self, request):
+        
+        user_id = 4  
+        
+        donation_id = request.data.get('donation_id')
+        quantity = request.data.get('quantity', 0)
+
+        try:
+            # Retrieve donation information
+            donation = Donation.objects.get(pk=donation_id)
+            total_inventory = donation.total_inventory
+            claimed_inventory = donation.claimed_inventory
+
+            # Calculate available inventory
+            available_inventory = total_inventory - claimed_inventory
+
+            # Check if requested quantity exceeds available inventory
+            if quantity > available_inventory:
+                return JsonResponse({'error': 'Not enough stock available'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Find or create a cart for the user
+            cart = Cart.objects.filter(charity__user_id=user_id, status=CartStatus.CARTED.value).first()
+            if not cart:
+                
+                charity = Charity.objects.get(user_id=user_id)
+                cart = Cart.objects.create(charity=charity, status=CartStatus.CARTED.value)
+
+            # Add the donation to the cart
+            carted_donation, created = CartedDonation.objects.get_or_create(cart=cart, donation=donation)
+            if not created:
+                carted_donation.quantity += int(quantity)
+                carted_donation.save()
+
+            return JsonResponse({'message': 'Item added to cart'}, status=status.HTTP_200_OK)
+        except Donation.DoesNotExist:
+            return JsonResponse({'error': 'Donation not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    @action(detail=True, methods=['post'])
+    def remove_from_cart(self, request, pk=None):
+        cart = self.get_object()
+        donation_id = request.data.get('donation_id')
+
+        try:
+        # Retrieve the carted donation associated with the specified donation_id
+            carted_donation = CartedDonation.objects.get(cart=cart, donation_id=donation_id)
+        
+            if carted_donation.quantity > 1:
+                carted_donation.quantity -= 1
+                carted_donation.save()
+            else:
+                carted_donation.delete()
+            
+            # Optionally, refresh the cart to reflect changes in the database
+            cart.refresh_from_db()
+
+            serializer = CartSerializer(cart)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except CartedDonation.DoesNotExist:
+        # If the carted donation does not exist, return an error response
+            return Response({'error': 'Carted donation not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=True, methods=['post'])
+    @transaction.atomic  # Use atomic transaction to ensure consistency
+    def checkout(self, request, pk=None):
+        cart = self.get_object()
+
+        # Create an order
+        order = Order.objects.create(charity=cart.charity)
+
+        # Update cart status to "ordered"
+        cart.status = CartStatus.ORDERED.value  # Use enum value directly
+        cart.save()
+
+        # Reduce remaining_inventory on the appropriate Donation models
+        carted_donations = CartedDonation.objects.filter(cart=cart)
+        for carted_donation in carted_donations:
+            donation = carted_donation.donation
+            quantity = carted_donation.quantity
+
+            # Reduce remaining_inventory
+            donation.remaining_inventory -= quantity
+            donation.save()
+
+        # Generate receipt and store it in the order
+        receipt_content = generate_receipt(order)
+        order.donation_receipt = receipt_content
+        order.save()
+
+        return Response({'message': 'Order processed successfully'}, status=status.HTTP_200_OK)
 
 class CartedDonationViewSet(viewsets.ModelViewSet):
     queryset = CartedDonation.objects.all()
