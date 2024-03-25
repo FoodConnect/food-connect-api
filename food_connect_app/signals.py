@@ -1,4 +1,3 @@
-# signals.py or apps.py
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import User, Donor, Charity, UserRole
