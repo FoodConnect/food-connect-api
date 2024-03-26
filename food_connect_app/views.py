@@ -7,15 +7,6 @@ from .models import User, Charity, Donor, Donation, Cart, CartedDonation, Order,
 
 from .serializers import UserSerializer, CharitySerializer, DonorSerializer, DonationSerializer, CartSerializer, CartedDonationSerializer, OrderSerializer, CategorySerializer, DonationCategorySerializer
 
-# google oauth authentication
-# from rest_framework.views import APIView
-# from rest_framework.response import Response
-# from rest_framework import status
-# from django.conf import settings
-# from django.shortcuts import redirect
-# from google_auth_oauthlib.flow import Flow
-# from .authentication import GoogleAuthentication
-
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -51,28 +42,3 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class DonationCategoryViewSet(viewsets.ModelViewSet):
     queryset = DonationCategory.objects.all()
     serializer_class = DonationCategorySerializer
-
-# google oauth - authentication
-# class GoogleAuthView(APIView):
-#     def get(self, request):
-#         flow = Flow.from_client_secrets_file(
-#             settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
-#             scopes=['openid', 'email'],
-#             redirect_uri='http://localhost:8000/auth/google/callback')
-#         authorization_url, state = flow.authorization_url(
-#             access_type='offline',
-#             include_granted_scopes='true')
-#         request.session['oauth_state'] = state
-#         return redirect(authorization_url)
-
-# class GoogleAuthCallbackView(APIView):
-#     def get(self, request):
-#         flow = Flow.from_client_secrets_file(
-#             settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
-#             scopes=['openid', 'email'],
-#             redirect_uri='http://localhost:8000/auth/google/callback')
-#         state = request.session['oauth_state']
-#         flow.fetch_token(authorization_response=request.build_absolute_uri(), state=state)
-#         token = flow.credentials.id_token
-#         # Handle token, e.g., store it in session or use it for authentication
-#         return Response({'token': token}, status=status.HTTP_200_OK)
