@@ -1,0 +1,24 @@
+POST http://localhost:8080/register/
+Content-Type: application/json
+
+{
+    "email": "perri@example.com",
+    "username": "perri_farms",
+    "password1": "omgtest123!",
+    "password2": "omgtest123!"
+}
+
+###
+
+POST http://localhost:8080/login/
+Content-Type: application/json
+
+{
+    "username": "perri_farms",
+    "password": "omgtest123!"
+}
+
+###
+
+POST http://localhost:8080/logout/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzExNTk1NzYzLCJpYXQiOjE3MTE1MDkzNjMsImp0aSI6ImJiMDdiZGFjNTBkZjQzMGM4ZGUyOTRhNTg4MTdkZDY2IiwidXNlcl9pZCI6Nn0.P8x9XQn9a943mDhk6xp_B-rnu12nq3LGDZ4t4kEeikc
