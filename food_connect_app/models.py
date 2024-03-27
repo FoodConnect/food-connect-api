@@ -48,7 +48,7 @@ class User(AbstractBaseUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    objects = UserManager()
+    objects = BaseUserManager()
 
     USERNAME_FIELD = 'email'
 
