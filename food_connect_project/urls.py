@@ -14,31 +14,25 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
-from food_connect_app.views import UserViewSet, CharityViewSet, DonorViewSet, DonationViewSet, CartViewSet, CartedDonationViewSet, OrderViewSet, CategoryViewSet, DonationCategoryViewSet
+from donations.urls import router as donations_router
+from users.urls import router as users_router
+from cart_order.urls import router as cart_order_router
 
 from dj_rest_auth.jwt_auth import get_refresh_view
 from dj_rest_auth.registration.views import RegisterView
 from dj_rest_auth.views import LoginView, LogoutView, UserDetailsView
 from rest_framework_simplejwt.views import TokenVerifyView
 
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'charities', CharityViewSet)
-router.register(r'donors', DonorViewSet)
-router.register(r'donations', DonationViewSet)
-router.register(r'carts', CartViewSet)
-router.register(r'carted_donations', CartedDonationViewSet)
-router.register(r'orders', OrderViewSet)
-router.register(r'categories', CategoryViewSet)
-router.register(r'donation_categories', DonationCategoryViewSet)
-
 urlpatterns = [
-    path('', include(router.urls)),
+    path('admin/', admin.site.urls),
+    path('', include(donations_router.urls)),
+    path('', include(users_router.urls)),
+    path('', include(cart_order_router.urls)),
     path("register/", RegisterView.as_view(), name="rest_register"),
     path("login/", LoginView.as_view(), name="rest_login"),
     path("logout/", LogoutView.as_view(), name="rest_logout"),
     path("user/", UserDetailsView.as_view(), name="rest_user_details"),
 ]
-
