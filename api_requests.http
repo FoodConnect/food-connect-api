@@ -2,17 +2,17 @@ POST http://localhost:8080/register/
 Content-Type: application/json
 
 {
-    "business_name": "Perri Farms",
-    "role": "donor",
+    "business_name": "Mano a Mano",
+    "role": "charity",
     "ein_number": "123456789",
     "image_data": "image_url_here",
     "address": "123 Street",
-    "city": "Grayslake",
+    "city": "Waukegan",
     "state": "Illinois",
-    "zipcode": "60030",
+    "zipcode": "60085",
     "phone_number": "1234567890",
-    "username": "perri_farms",
-    "email": "perri@example.com",
+    "username": "mano_a_mano",
+    "email": "mam@example.com",
     "password": "omgtest123!" 
 }
 
