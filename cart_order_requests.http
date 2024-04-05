@@ -1,0 +1,23 @@
+POST http://localhost:8080/carts/add_to_cart/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEyNDMyNTcxLCJpYXQiOjE3MTIzNDYxNzEsImp0aSI6IjkyMGQxOTE1ODk3MzQ3ZTM5ZDc0ZTZhMTQwNmFkNjkyIiwidXNlcl9pZCI6MTd9.Ipd6n1pIRZ2GIc0-F1ZwKV0KgdV7S9W7ibOKt9srhFs
+
+{
+    "donation_id": 4,
+    "quantity": 1
+}
+
+### 
+
+POST http://example.com/api/carts/1/remove_from_cart/
+Content-Type: application/json
+Authorization: Bearer your_authentication_token
+
+{
+  "donation_id": 1
+}
+
+###
+POST http://example.com/api/carts/1/checkout/
+Content-Type: application/json
+Authorization: Bearer your_authentication_token
