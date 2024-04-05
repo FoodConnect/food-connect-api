@@ -4,11 +4,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Cart, CartedDonation, Order, Donation, CartStatus
+from .models import Cart, CartedDonation, Order, Donation, CartStatus, OrderedDonation
 
 from users.models import UserRole, User, Charity
 
-from .serializers import CartSerializer, CartedDonationSerializer, OrderSerializer
+from .serializers import CartSerializer, CartedDonationSerializer, OrderSerializer, OrderedDonationSerializer
 
 #for carting/order logic
 from django.http import JsonResponse
@@ -73,21 +73,28 @@ class CartViewSet(viewsets.ModelViewSet):
         charity = get_object_or_404(Charity, user=user)
 
         donation_id = request.data.get('donation_id')
+        quantity_to_remove = int(request.data.get('quantity', 1))
 
         try:
+            # Retrieve the carted donation for the specified donation_id
             carted_donation = CartedDonation.objects.get(cart__charity=charity, donation_id=donation_id)
 
-            if carted_donation.quantity > 1:
-                carted_donation.quantity -= 1
-                carted_donation.save()
-            else:
+            # If the requested quantity to remove is greater than the quantity in the cart,
+            # simply delete the entire carted donation
+            if quantity_to_remove >= carted_donation.quantity:
                 carted_donation.delete()
+            else:
+                # If the requested quantity to remove is less than the quantity in the cart,
+                # decrement the carted donation quantity by the requested quantity
+                carted_donation.quantity -= quantity_to_remove
+                carted_donation.save()
 
             cart.refresh_from_db()
             serializer = CartSerializer(cart)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except CartedDonation.DoesNotExist:
             return Response({'error': 'Carted donation not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
     @action(detail=True, methods=['post'])
     @transaction.atomic
@@ -109,22 +116,22 @@ class CartViewSet(viewsets.ModelViewSet):
         cart.status = CartStatus.ORDERED.value
         cart.save()
 
-        # Reduce remaining_inventory on the appropriate Donation models
-        carted_donations = CartedDonation.objects.filter(cart=cart)
-        for carted_donation in carted_donations:
+        # Iterate through carted donations to create ordered donations
+        for carted_donation in cart.carteddonation_set.all():
             donation = carted_donation.donation
             quantity = carted_donation.quantity
+
+            # Create ordered donation for the current carted donation
+            OrderedDonation.objects.create(order=order, donation=donation, quantity=quantity)
+
+        # Reduce remaining_inventory on the appropriate Donation models
+        for ordered_donation in order.ordered_donations.all():
+            donation = ordered_donation.donation
+            quantity = ordered_donation.quantity
             donation.remaining_inventory -= quantity
             donation.save()
 
         return Response({'message': 'Order processed successfully'}, status=status.HTTP_200_OK)
-
-        # Generate receipt and store it in the order
-        # receipt_content = generate_receipt(order)
-        # order.donation_receipt = receipt_content
-        # order.save()
-
-        # return Response({'message': 'Order processed successfully'}, status=status.HTTP_200_OK)
 
 class CartedDonationViewSet(viewsets.ModelViewSet):
     queryset = CartedDonation.objects.all()
@@ -133,3 +140,7 @@ class CartedDonationViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+class OrderedDonationViewSet(viewsets.ModelViewSet):
+    queryset = OrderedDonation.objects.all()
+    serializer_class = OrderedDonationSerializer

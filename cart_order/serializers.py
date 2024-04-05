@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Cart, CartedDonation, Order
+from .models import Cart, CartedDonation, Order, OrderedDonation
 
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,3 +17,8 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
         read_only_fields = ['created_at', 'updated_at', 'id']
+
+class OrderedDonationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderedDonation
+        fields = '__all__'

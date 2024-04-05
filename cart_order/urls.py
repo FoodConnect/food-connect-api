@@ -1,11 +1,12 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import CartViewSet, CartedDonationViewSet, OrderViewSet
+from .views import CartViewSet, CartedDonationViewSet, OrderViewSet, OrderedDonationViewSet
 
 router = routers.DefaultRouter()
 router.register(r'carts', CartViewSet)
 router.register(r'carted_donations', CartedDonationViewSet)
 router.register(r'orders', OrderViewSet)
+router.register(r'ordered_donations', OrderedDonationViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
