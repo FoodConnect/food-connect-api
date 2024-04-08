@@ -1,9 +1,9 @@
 POST http://localhost:8080/carts/add_to_cart/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEyNDMyNTcxLCJpYXQiOjE3MTIzNDYxNzEsImp0aSI6IjkyMGQxOTE1ODk3MzQ3ZTM5ZDc0ZTZhMTQwNmFkNjkyIiwidXNlcl9pZCI6MTd9.Ipd6n1pIRZ2GIc0-F1ZwKV0KgdV7S9W7ibOKt9srhFs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEyNjg3OTcyLCJpYXQiOjE3MTI2MDE1NzIsImp0aSI6IjhhNmU3NTRlMjkyZTQ5NDVhZjFmYmY3NTYwOWIyMzgzIiwidXNlcl9pZCI6MTd9.5-nKdc-k-AvXxG7V4xDCAHf4cFDM6ojNFZR_dH7tGvg
 
 {
-    "donation_id": 3,
+    "donation_id": 2,
     "quantity": 4
 }
 
@@ -11,14 +11,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 POST http://localhost:8080/carts/4/remove_from_cart/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEyNDMyNTcxLCJpYXQiOjE3MTIzNDYxNzEsImp0aSI6IjkyMGQxOTE1ODk3MzQ3ZTM5ZDc0ZTZhMTQwNmFkNjkyIiwidXNlcl9pZCI6MTd9.Ipd6n1pIRZ2GIc0-F1ZwKV0KgdV7S9W7ibOKt9srhFs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEyNjg3OTcyLCJpYXQiOjE3MTI2MDE1NzIsImp0aSI6IjhhNmU3NTRlMjkyZTQ5NDVhZjFmYmY3NTYwOWIyMzgzIiwidXNlcl9pZCI6MTd9.5-nKdc-k-AvXxG7V4xDCAHf4cFDM6ojNFZR_dH7tGvg
 
 {
-  "donation_id": 3,
+  "donation_id": 2,
   "quantity": 1
 }
 
 ###
-POST http://localhost:8080/carts/4/checkout/
+POST http://localhost:8080/carts/5/checkout/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEyNDMyNTcxLCJpYXQiOjE3MTIzNDYxNzEsImp0aSI6IjkyMGQxOTE1ODk3MzQ3ZTM5ZDc0ZTZhMTQwNmFkNjkyIiwidXNlcl9pZCI6MTd9.Ipd6n1pIRZ2GIc0-F1ZwKV0KgdV7S9W7ibOKt9srhFs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEyNjg3OTcyLCJpYXQiOjE3MTI2MDE1NzIsImp0aSI6IjhhNmU3NTRlMjkyZTQ5NDVhZjFmYmY3NTYwOWIyMzgzIiwidXNlcl9pZCI6MTd9.5-nKdc-k-AvXxG7V4xDCAHf4cFDM6ojNFZR_dH7tGvg

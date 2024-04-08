@@ -124,11 +124,12 @@ class CartViewSet(viewsets.ModelViewSet):
             # Create ordered donation for the current carted donation
             OrderedDonation.objects.create(order=order, donation=donation, quantity=quantity)
 
-        # Reduce remaining_inventory on the appropriate Donation models
+        # Reduce remaining_inventory and increase claimed_inventory on the appropriate Donation models
         for ordered_donation in order.ordered_donations.all():
             donation = ordered_donation.donation
             quantity = ordered_donation.quantity
             donation.remaining_inventory -= quantity
+            donation.claimed_inventory += quantity
             donation.save()
 
         return Response({'message': 'Order processed successfully'}, status=status.HTTP_200_OK)
