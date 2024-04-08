@@ -16,6 +16,7 @@ from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from django.contrib.auth import get_user_model
+import json
 
 
 class CartViewSet(viewsets.ModelViewSet):
@@ -112,6 +113,9 @@ class CartViewSet(viewsets.ModelViewSet):
         # Create an order for the user associated with the cart
         order = Order.objects.create(charity=charity)
 
+        # Initialize an empty list to store donation receipts
+        donation_receipts = []
+
         # Update cart status to "ordered"
         cart.status = CartStatus.ORDERED.value
         cart.save()
@@ -123,6 +127,37 @@ class CartViewSet(viewsets.ModelViewSet):
 
             # Create ordered donation for the current carted donation
             OrderedDonation.objects.create(order=order, donation=donation, quantity=quantity)
+
+            # Access donor information through the user attribute of the Donor model
+            donor_business_name = donation.donor.user.business_name
+            donor_ein_number = donation.donor.user.ein_number
+        
+            # Construct donation receipt
+            donation_receipt = {
+                'donation_id': donation.id,
+                'donation_title': donation.title,
+                'donor': donor_business_name,
+                'donor_ein_number': donor_ein_number,
+                'quantity': quantity,
+                'address': donation.address,
+                'city': donation.city,
+                'state': donation.state,
+                'zipcode': donation.zipcode
+            }
+
+            # Add donation receipt to the list
+            donation_receipts.append(donation_receipt)
+
+            print("Donation Receipts List:", donation_receipts)
+
+        try:
+            # Convert donation_receipts list to JSON and store it in the receipt field
+            order.receipt = json.dumps(donation_receipts)
+            order.save()
+        except Exception as e:
+            # Print or log the error message for debugging
+            print("Error occurred while saving donation receipts:", str(e))
+
 
         # Reduce remaining_inventory and increase claimed_inventory on the appropriate Donation models
         for ordered_donation in order.ordered_donations.all():

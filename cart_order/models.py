@@ -23,6 +23,7 @@ class CartedDonation(models.Model):
 class Order(models.Model):
     id = models.AutoField(primary_key=True)
     charity = models.ForeignKey(Charity, on_delete=models.CASCADE)
+    donation_receipt = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
 class OrderedDonation(models.Model):
