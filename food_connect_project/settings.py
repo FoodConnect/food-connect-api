@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    # 'allauth.registration',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'dj_rest_auth',
     'dj_rest_auth.registration',
 ]
@@ -168,6 +170,16 @@ REST_AUTH = {
     "USE_JWT": True,
     "JWT_AUTH_HTTPONLY": False,
 }
+
+REST_AUTH_SERIALIZERS = {
+    "USER_DETAILS_SERIALIZER": "path.to.serializers.CustomUserDetailsSerializer",
+}
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.serializers.CustomUserRegisterSerializer',
+}
+USER_ADAPTER = 'users.adapter.CustomUserAdapter'
+AUTH_USER_MODEL = 'users.User'
 
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
