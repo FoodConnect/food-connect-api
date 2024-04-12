@@ -1,3 +1,4 @@
+from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 from .models import User, Charity, Donor, UserRole
 
@@ -16,13 +17,19 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+    
+class CustomUserDetailsSerializer(UserDetailsSerializer):
+    class Meta(UserDetailsSerializer.Meta):
+        fields = UserDetailsSerializer.Meta.fields + \
+            ('role',)
 
 class CharitySerializer(serializers.ModelSerializer):
-  class Meta:
+    class Meta:
       model = Charity
       fields = '__all__'
 
 class DonorSerializer(serializers.ModelSerializer):
-  class Meta:
-      model = Donor
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    class Meta:
+      model = User
       fields = '__all__'

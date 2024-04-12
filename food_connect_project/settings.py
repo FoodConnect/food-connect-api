@@ -169,5 +169,11 @@ REST_AUTH = {
     "JWT_AUTH_HTTPONLY": False,
 }
 
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'users.serializers.CustomUserDetailsSerializer',
+}
+ACCOUNT_ADAPTER = 'users.adapter.CustomAccountAdapter'
+AUTH_USER_MODEL = 'users.User'
+
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
