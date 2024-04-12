@@ -26,6 +26,7 @@ from dj_rest_auth.views import LoginView, LogoutView, UserDetailsView
 from rest_framework_simplejwt.views import TokenVerifyView
 
 from users.views import UserRegistrationAPIView
+from cart_order.views import CartViewSet, CartedDonationViewSet, OrderViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,4 +37,7 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="rest_login"),
     path("logout/", LogoutView.as_view(), name="rest_logout"),
     path("user/", UserDetailsView.as_view(), name="rest_user_details"),
+    path('carts/add_to_cart/', CartViewSet.as_view({'post': 'add_to_cart'}), name='add_to_cart'),
+    path('carts/<int:pk>/remove_from_cart/', CartViewSet.as_view({'post': 'remove_from_cart'}), name='remove_from_cart'),
+    path('carts/<int:pk>/checkout/', CartViewSet.as_view({'post': 'checkout'}), name='checkout'),
 ]
