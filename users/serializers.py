@@ -29,7 +29,13 @@ class CharitySerializer(serializers.ModelSerializer):
       fields = '__all__'
 
 class DonorSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
       model = User
       fields = '__all__'
+
+    
+# Used for the Donations get request to serve up some details about the donor (in DonationsSerializer)
+class DonorDonationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['business_name', 'email', 'city', 'state', 'image_data', 'phone_number'] 
