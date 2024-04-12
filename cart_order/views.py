@@ -152,7 +152,7 @@ class CartViewSet(viewsets.ModelViewSet):
 
         try:
             # Convert donation_receipts list to JSON and store it in the receipt field
-            order.receipt = json.dumps(donation_receipts)
+            order.donation_receipt = json.dumps(donation_receipts)
             order.save()
         except Exception as e:
             # Print or log the error message for debugging
