@@ -38,4 +38,4 @@ class DonorSerializer(serializers.ModelSerializer):
 class DonorDonationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['business_name', 'email', 'city', 'state', 'image_data', 'phone_number'] 
+        fields = ['id', 'business_name', 'email', 'city', 'state', 'image_data', 'phone_number'] 
