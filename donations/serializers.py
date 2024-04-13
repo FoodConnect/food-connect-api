@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from users.serializers import DonorDonationsSerializer
+from users.serializers import DonorDonationsSerializer, DonorSerializer, UserSerializer
 from .models import Donation, Category, DonationCategory
 
 class DonationSerializer(serializers.ModelSerializer):

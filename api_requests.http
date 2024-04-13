@@ -38,6 +38,26 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:8080/register/
+Content-Type: application/json
+
+{
+
+    "role": "charity",
+    "ein_number": "123456789",
+    "image_data": "image_url_here",
+    "address": "123 Street",
+    "city": "Grayslake",
+    "state": "Illinois",
+    "zipcode": "60030",
+    "phone_number": "1234567890",
+    "username": "jewel_osco",
+    "email": "jewel@example.com",
+    "password": "omgtest123!" 
+}
+
+###
+
 POST http://localhost:8080/login/
 Content-Type: application/json
 
