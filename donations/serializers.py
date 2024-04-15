@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
+from users.models import Donor
 from users.serializers import DonorDonationsSerializer, DonorSerializer, UserSerializer
 from .models import Donation, Category, DonationCategory
 
 class DonationSerializer(serializers.ModelSerializer):
-    donor = DonorDonationsSerializer(source='get_donor', read_only=True)
+    donor = DonorDonationsSerializer(read_only=True)
+    donor_id = serializers.PrimaryKeyRelatedField(queryset=Donor.objects.all(), write_only=True)
     class Meta:
         model = Donation
         fields = '__all__'
