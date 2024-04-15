@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import Donor
+from users.models import Donor, UserRole
 
 class Donation(models.Model):
     id = models.AutoField(primary_key=True)
@@ -18,6 +18,11 @@ class Donation(models.Model):
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_donor(self):
+        if self.donor.user.role == UserRole.DONOR.value:
+            return self.donor.user
+        return None
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)

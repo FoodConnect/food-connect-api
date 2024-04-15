@@ -1,9 +1,8 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 
-from .models import User, Charity, Donor, UserRole
+from .models import User, Charity, Donor
 
 from .serializers import UserSerializer, CharitySerializer, DonorSerializer
 

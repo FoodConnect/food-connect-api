@@ -1,3 +1,4 @@
+from dj_rest_auth.serializers import UserDetailsSerializer
 from rest_framework import serializers
 from .models import User, Charity, Donor, UserRole
 
@@ -16,13 +17,31 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+    
+class CustomUserDetailsSerializer(UserDetailsSerializer):
+    class Meta(UserDetailsSerializer.Meta):
+        fields = UserDetailsSerializer.Meta.fields + \
+            ('role',)
 
 class CharitySerializer(serializers.ModelSerializer):
-  class Meta:
+    class Meta:
       model = Charity
       fields = '__all__'
 
 class DonorSerializer(serializers.ModelSerializer):
-  class Meta:
+    class Meta:
       model = Donor
       fields = '__all__'
+
+    
+# Used for the Donations get request to serve up some details about the donor (in DonationsSerializer)
+class DonorDonationsSerializer(serializers.ModelSerializer):
+    business_name = serializers.CharField(source='user.business_name')
+    email = serializers.EmailField(source='user.email')
+    city = serializers.CharField(source='user.city')
+    state = serializers.CharField(source='user.state')
+    image_data = serializers.CharField(source='user.image_data')
+    phone_number = serializers.CharField(source='user.phone_number')
+    class Meta:
+        model = Donor
+        fields = ['id', 'business_name', 'email', 'city', 'state', 'image_data', 'phone_number']
