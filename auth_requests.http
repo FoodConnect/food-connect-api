@@ -1,0 +1,52 @@
+POST http://localhost:8080/register/
+Content-Type: application/json
+
+{
+    "business_name": "Mano a Mano",
+    "role": "charity",
+    "ein_number": "123456789",
+    "image_data": "image_url_here",
+    "address": "123 Street",
+    "city": "Waukegan",
+    "state": "Illinois",
+    "zipcode": "60085",
+    "phone_number": "1234567890",
+    "username": "mano_a_mano",
+    "email": "mam@example.com",
+    "password": "omgtest123!" 
+}
+
+###
+
+POST http://localhost:8080/register/
+Content-Type: application/json
+
+{
+    "business_name": "Jewel Osco",
+    "role": "donor",
+    "ein_number": "123456789",
+    "image_data": "image_url_here",
+    "address": "123 Street",
+    "city": "Grayslake",
+    "state": "Illinois",
+    "zipcode": "60030",
+    "phone_number": "1234567890",
+    "username": "jewel_osco",
+    "email": "jewel@example.com",
+    "password": "omgtest123!" 
+}
+
+###
+
+POST http://localhost:8080/login/
+Content-Type: application/json
+
+{
+    "username": "mano_a_mano",
+    "password": "omgtest123!"
+}
+
+###
+
+POST http://localhost:8080/logout/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEyNDMxMDAxLCJpYXQiOjE3MTIzNDQ2MDEsImp0aSI6IjhjYzE2NGFiNGRjNDRjNjZhNTA2MTUyYTExODMyYzFhIiwidXNlcl9pZCI6MTV9.O-PII8dMedLuzAo7l6W-XaVEpEdo9isAUdf_fkktsv0
