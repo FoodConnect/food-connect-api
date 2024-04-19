@@ -45,7 +45,7 @@ class CartViewSet(viewsets.ModelViewSet):
             if donation.remaining_inventory < quantity:
                 return Response({'error': 'Not enough stock available'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Find or create a cart for the user's charity
+            # Find or create a cart for the authenticated user
             cart, _ = Cart.objects.get_or_create(charity=charity, status=CartStatus.CARTED.value)
 
             # Add the donation to the cart
