@@ -1,6 +1,6 @@
 from django.db import models
 from enum import Enum
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 class UserRole(Enum):
     DONOR = 'donor'
@@ -24,7 +24,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
         return self.create_user(username, password, **extra_fields)
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
     business_name = models.CharField(max_length=255)
     role = models.CharField(max_length=50, choices=[(role.value, role.name) for role in UserRole])
@@ -39,6 +39,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(blank=True)  # optional email field
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
