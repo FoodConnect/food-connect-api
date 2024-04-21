@@ -173,6 +173,13 @@ class CartedDonationViewSet(viewsets.ModelViewSet):
     queryset = CartedDonation.objects.all()
     serializer_class = CartedDonationSerializer
 
+    #custom action for retrieving carted donations for a specific cart
+    @action(detail=True, methods=['get'])
+    def carted_donations_for_cart(self, request, pk=None):
+        carted_donations = CartedDonation.objects.filter(cart_id=pk)
+        serializer = CartedDonationSerializer(carted_donations, many=True)
+        return Response(serializer.data)
+
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
