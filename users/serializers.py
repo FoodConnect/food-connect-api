@@ -44,4 +44,4 @@ class DonorDonationsSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(source='user.phone_number')
     class Meta:
         model = Donor
-        fields = ['id', 'business_name', 'email', 'city', 'state', 'image_data', 'phone_number']
+        fields = ['user_id', 'business_name', 'email', 'city', 'state', 'image_data', 'phone_number']
