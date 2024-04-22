@@ -28,8 +28,6 @@ from rest_framework_simplejwt.views import TokenVerifyView
 from users.views import UserRegistrationAPIView
 from cart_order.views import CartViewSet, CartedDonationViewSet, OrderViewSet
 
-from rest_framework.decorators import action
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(donations_router.urls)),
@@ -42,5 +40,4 @@ urlpatterns = [
     path('carts/add_to_cart/', CartViewSet.as_view({'post': 'add_to_cart'}), name='add_to_cart'),
     path('carts/<int:pk>/remove_from_cart/', CartViewSet.as_view({'post': 'remove_from_cart'}), name='remove_from_cart'),
     path('carts/<int:pk>/checkout/', CartViewSet.as_view({'post': 'checkout'}), name='checkout'),
-    path('carted_donations/cart/<int:pk>/', CartedDonationViewSet.as_view({'get': 'carted_donations_for_cart'}), name='carted_donations_cart'),
 ]
