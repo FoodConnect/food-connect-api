@@ -100,7 +100,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'food-connect-api',
-        'HOST': 'localhost',  # Or your database host
+        'HOST': 'localhost',  
         'PORT': '',            # Leave it blank for default port
     }
 }

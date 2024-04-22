@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+
+from users.models import Donor, User
 
 from .models import Donation, Category, DonationCategory
 
@@ -11,8 +13,10 @@ class DonationViewSet(viewsets.ModelViewSet):
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
     def perform_create(self, serializer):
-        donor_id = self.request.data.get('donor_id')
-        serializer.save(donor_id=donor_id)
+        user_id = self.request.data.get('donor_id')  # Assuming donor_id is actually a user_id
+        user = get_object_or_404(User, id=user_id)
+        donor = get_object_or_404(Donor, user=user)
+        serializer.save(donor=donor)
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.action == 'list':

@@ -6,7 +6,6 @@ from .models import Donation, Category, DonationCategory
 
 class DonationSerializer(serializers.ModelSerializer):
     donor = DonorDonationsSerializer(read_only=True)
-    donor_id = serializers.PrimaryKeyRelatedField(queryset=Donor.objects.all(), write_only=True)
     class Meta:
         model = Donation
         fields = '__all__'
