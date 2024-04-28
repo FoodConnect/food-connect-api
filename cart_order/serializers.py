@@ -28,18 +28,23 @@ class CartedDonationSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     carted_donations = CartedDonationSerializer(many=True, source='carteddonation_set')
+
     class Meta:
         model = Cart
         fields = '__all__'
         read_only_fields = ['created_at', 'updated_at', 'id']
 
+class OrderedDonationSerializer(serializers.ModelSerializer):
+    donation = DonationSerializer()
+    
+    class Meta:
+        model = OrderedDonation
+        fields = '__all__'
+
 class OrderSerializer(serializers.ModelSerializer):
+    ordered_donations = OrderedDonationSerializer(many=True)
+
     class Meta:
         model = Order
         fields = '__all__'
         read_only_fields = ['created_at', 'updated_at', 'id']
-
-class OrderedDonationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderedDonation
-        fields = '__all__'
