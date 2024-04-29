@@ -18,6 +18,24 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
     
+    def validate(self, attrs):
+        role = attrs.get('role')
+        business_name = attrs.get('business_name')
+        ein_number = attrs.get('ein_number')
+
+        if role == UserRole.CHARITY.value:
+            if business_name:
+                attrs['business_name'] = ''
+            if ein_number:
+                attrs['ein_number'] = ''
+        else:
+            if not business_name:
+                raise serializers.ValidationError("Business name and EIN are required for donors.")
+            if not ein_number:
+                raise serializers.ValidationError("Business name and EIN are required for donors.")
+
+        return attrs
+    
 class CustomUserDetailsSerializer(UserDetailsSerializer):
     class Meta(UserDetailsSerializer.Meta):
         fields = UserDetailsSerializer.Meta.fields + \

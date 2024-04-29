@@ -26,9 +26,9 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
-    business_name = models.CharField(max_length=255)
+    business_name = models.CharField(max_length=255, blank=True)
     role = models.CharField(max_length=50, choices=[(role.value, role.name) for role in UserRole])
-    ein_number = models.CharField(max_length=255)
+    ein_number = models.CharField(max_length=255, blank=True)
     image_data = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     city = models.CharField(max_length=255)

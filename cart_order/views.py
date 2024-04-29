@@ -173,8 +173,13 @@ class CartViewSet(viewsets.ModelViewSet):
 
     # Retrieve Carted donation information under specific cart ID
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
+        user = request.user
+        cart = Cart.objects.filter(charity__user=user, status=CartStatus.CARTED.value.first())
+        if cart is None:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.get_serializer(cart)
+        
         return Response(serializer.data)
 
 class CartedDonationViewSet(viewsets.ModelViewSet):
