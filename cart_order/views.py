@@ -169,6 +169,14 @@ class CartViewSet(viewsets.ModelViewSet):
 
         return Response({'message': 'Order processed successfully'}, status=status.HTTP_200_OK)
 
+        #
+
+    # Retrieve Carted donation information under specific cart ID
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
 class CartedDonationViewSet(viewsets.ModelViewSet):
     queryset = CartedDonation.objects.all()
     serializer_class = CartedDonationSerializer
@@ -176,6 +184,12 @@ class CartedDonationViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+    # Retrieve Ordered donation information under specific order ID
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 class OrderedDonationViewSet(viewsets.ModelViewSet):
     queryset = OrderedDonation.objects.all()
