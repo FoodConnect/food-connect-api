@@ -22,6 +22,24 @@ POST http://localhost:8080/register/
 Content-Type: application/json
 
 {
+    "role": "charity",
+    "image_data": "image_url_here",
+    "address": "123 Street",
+    "city": "Waukegan",
+    "state": "Illinois",
+    "zipcode": "60085",
+    "phone_number": "1234567890",
+    "username": "test_charity",
+    "email": "test@test.com",
+    "password": "password" 
+}
+
+###
+
+POST http://localhost:8080/register/
+Content-Type: application/json
+
+{
     "business_name": "Jewel Osco",
     "role": "donor",
     "ein_number": "123456789",
