@@ -30,9 +30,9 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                 attrs['ein_number'] = ''
         else:
             if not business_name:
-                raise serializers.ValidationError("Business name is required for donors.")
+                raise serializers.ValidationError("Business name and EIN are required for donors.")
             if not ein_number:
-                raise serializers.ValidationError("EIN is required for donors.")
+                raise serializers.ValidationError("Business name and EIN are required for donors.")
 
         return attrs
     
