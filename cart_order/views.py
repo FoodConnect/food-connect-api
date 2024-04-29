@@ -171,11 +171,11 @@ class CartViewSet(viewsets.ModelViewSet):
 
         #
 
-        # Retrieve Carted donation information under specific cart ID
-        def retrieve(self, request, *args, **kwargs):
-            instance = self.get_object()
-            serializer = self.get_serializer(instance)
-            return Response(serializer.data)
+    # Retrieve Carted donation information under specific cart ID
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 class CartedDonationViewSet(viewsets.ModelViewSet):
     queryset = CartedDonation.objects.all()
