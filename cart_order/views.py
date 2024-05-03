@@ -169,17 +169,23 @@ class CartViewSet(viewsets.ModelViewSet):
 
         return Response({'message': 'Order processed successfully'}, status=status.HTTP_200_OK)
 
-        #
-
-    # Retrieve Carted donation information under specific cart ID
-    def retrieve(self, request, *args, **kwargs):
+    @action(detail=False, methods=['get'])
+    def cart_for_current_user(self, request):
         user = request.user
-        cart = Cart.objects.filter(charity__user=user, status=CartStatus.CARTED.value.first())
+        
+        if user.role != UserRole.CHARITY.value:
+            return Response({'message': 'User is not associated with any charity'}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            charity = user.charity
+        except Charity.DoesNotExist:
+            return Response({'message': 'User is not associated with any charity'}, status=status.HTTP_404_NOT_FOUND)
+        
+        charity_id = charity.id
+        cart = Cart.objects.filter(charity_id=charity_id, status=CartStatus.CARTED.value).first()
         if cart is None:
-            return Response({}, status=status.HTTP_404_NOT_FOUND)
-        
+            return Response({'message': 'No cart found for the current user'}, status=status.HTTP_404_NOT_FOUND)
+
         serializer = self.get_serializer(cart)
-        
         return Response(serializer.data)
 
 class CartedDonationViewSet(viewsets.ModelViewSet):
