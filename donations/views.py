@@ -13,7 +13,7 @@ class DonationViewSet(viewsets.ModelViewSet):
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
     def perform_create(self, serializer):
-        user_id = self.request.data.get('donor_id')  # Assuming donor_id is actually a user_id
+        user_id = self.request.data.get('donor_id')
         user = get_object_or_404(User, id=user_id)
         donor = get_object_or_404(Donor, user=user)
         serializer.save(donor=donor)
