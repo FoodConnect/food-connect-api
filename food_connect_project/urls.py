@@ -38,6 +38,7 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="rest_logout"),
     path("user/", UserDetailsView.as_view(), name="rest_user_details"),
     path('carts/add_to_cart/', CartViewSet.as_view({'post': 'add_to_cart'}), name='add_to_cart'),
-    path('carts/<int:pk>/remove_from_cart/', CartViewSet.as_view({'post': 'remove_from_cart'}), name='remove_from_cart'),
+    path('carts/update/', CartViewSet.as_view({'post': 'update_cart'}), name='update_cart'),
     path('carts/<int:pk>/checkout/', CartViewSet.as_view({'post': 'checkout'}), name='checkout'),
+    path('carts/cart_for_current_user/', CartViewSet.as_view({'get': 'cart_for_current_user'}), name='cart_for_current_user'),
 ]
