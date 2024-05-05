@@ -62,33 +62,32 @@ class CartViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Donation not found'}, status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=True, methods=['post'])
-    def remove_from_cart(self, request, pk=None):
+    def update_cart(self, request, pk=None):
         cart = self.get_object()
         user = request.user
 
         # Ensure the authenticated user has the 'charity' role
         if user.role != UserRole.CHARITY.value:
-            return Response({'error': 'Only charities can remove items from cart'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'Only charities can update items in the cart'}, status=status.HTTP_403_FORBIDDEN)
 
         # Retrieve the associated Charity object
         charity = get_object_or_404(Charity, user=user)
 
         donation_id = request.data.get('donation_id')
-        quantity_to_remove = int(request.data.get('quantity', 1))
+        quantity_to_update = int(request.data.get('quantity', 0))
 
         try:
             # Retrieve the carted donation for the specified donation_id
             carted_donation = CartedDonation.objects.get(cart__charity=charity, donation_id=donation_id)
 
-            # If the requested quantity to remove is greater than the quantity in the cart,
-            # simply delete the entire carted donation
-            if quantity_to_remove >= carted_donation.quantity:
-                carted_donation.delete()
-            else:
-                # If the requested quantity to remove is less than the quantity in the cart,
-                # decrement the carted donation quantity by the requested quantity
-                carted_donation.quantity -= quantity_to_remove
+            if quantity_to_update > 0:
+            
+                carted_donation.quantity = quantity_to_update
                 carted_donation.save()
+
+            else:
+            # If requested quantity is 0 or less, remove carted donation
+                carted_donation.delete()
 
             cart.refresh_from_db()
             serializer = CartSerializer(cart)

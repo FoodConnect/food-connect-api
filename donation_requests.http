@@ -1,0 +1,19 @@
+POST http://localhost:8080/donations/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0OTU0OTc4LCJpYXQiOjE3MTQ4Njg1NzgsImp0aSI6IjNlZGU4ZWMyMWFhODQ2M2U4YzkzMTQwOWNiZGUxOGUzIiwidXNlcl9pZCI6Nn0.MxR1qrFIS0gpwMbsGaT1HYWHuMsk8U7ZXZN8NoIsjWk
+
+{
+        "donor_id": 6,
+        "title": "Pasta",
+      "image_data": "https://m.media-amazon.com/images/I/810iFl7wP1L._AC_UF894,1000_QL80_DpWeblab_.jpg",
+        "description": "Box of penne pasta",
+        "total_inventory": 10,
+        "claimed_inventory": 0,
+        "remaining_inventory": 10,
+        "pick_up_deadline": "2025-05-04T15:30:00Z",
+        "address": "123 Ave.",
+        "city": "Lake Forest",
+        "state": "Illinois",
+        "zipcode": "53729",
+        "is_available": true
+}
