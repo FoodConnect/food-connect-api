@@ -194,6 +194,7 @@ class CartedDonationViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
 
     # Retrieve Ordered donation information under specific order ID
     def retrieve(self, request, *args, **kwargs):

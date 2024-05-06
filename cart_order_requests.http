@@ -19,9 +19,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 }
 
 ###
-POST http://localhost:8080/carts/1/checkout/
+POST http://localhost:8080/carts/3/checkout/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0Nzc4NjI5LCJpYXQiOjE3MTQ2OTIyMjksImp0aSI6IjQ0MDQyNzFmYTZjOTQ3Yjg5MmVmYzdmMTE0NGY3NDQyIiwidXNlcl9pZCI6MTB9.umjdmyQ7yleBlYyOgRQJtCALicaovNoaaMERbdDyBZI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1MDA4ODI3LCJpYXQiOjE3MTQ5MjI0MjcsImp0aSI6IjhiYmQyNjdhNzI1MjRmZjdiZjQwZTE1YzdjOTZkMTE0IiwidXNlcl9pZCI6NX0.KFzgDW5Dg66HhlymjMcI7udht_rPZAPwjpe6Rtx5uyI
 
 ###
 GET http://localhost:8080/carts/cart_for_current_user/
@@ -33,3 +33,16 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 GET http://localhost:8080/orders/18/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0NDkyNjU3LCJpYXQiOjE3MTQ0MDYyNTcsImp0aSI6ImQ3NTZmOWNhMWFkYjQ3ZmQ4NGRlYjZmNjc1NTZjOWQxIiwidXNlcl9pZCI6MTd9.QzrPMaoooh5j_0ylzaSotMf3Te0UT421Xu6krpSwoJo
+
+
+### 
+
+GET http://localhost:8080/orders/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1MDA4NDkxLCJpYXQiOjE3MTQ5MjIwOTEsImp0aSI6IjQxMGI3MTVmZWU4YTQxMDM4YjM1MGRmMWMxNGQ1NTcwIiwidXNlcl9pZCI6N30.tuCq58Wjm4FmiViZwJ7uMlu983W_GmIHEn4_4_lRX0c
+
+###
+
+GET http://localhost:8080/carts/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1MDA4NDkxLCJpYXQiOjE3MTQ5MjIwOTEsImp0aSI6IjQxMGI3MTVmZWU4YTQxMDM4YjM1MGRmMWMxNGQ1NTcwIiwidXNlcl9pZCI6N30.tuCq58Wjm4FmiViZwJ7uMlu983W_GmIHEn4_4_lRX0c
