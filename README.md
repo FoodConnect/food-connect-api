@@ -46,16 +46,10 @@ Otherwise upgrade with
 pip install --upgrade pip
 ```
 
-and install Django and Django REST Framework with
+and install the project requirements with
 
 ```
-pip install django djangorestframework
-```
-
-as well as the django-cors-headers dependency with
-
-```
-pip install django-cors-headers
+pip install -r requirements.txt
 ```
 
 ### Connecting to PostgreSQL Database
@@ -95,12 +89,6 @@ and quit the session with
 
 ```
 \q
-```
-
-To link your database to a postgresql database, first install 'psycopg2' module in your virtual environment to get Python to operate with Postgres:
-
-```
-pip install psycopg2
 ```
 
 Create a database in your Postgres server. Then alter the following code in your settings.py file of your project:
