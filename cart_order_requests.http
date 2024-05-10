@@ -1,9 +1,9 @@
 POST http://localhost:8080/carts/add_to_cart/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0OTU2MTA3LCJpYXQiOjE3MTQ4Njk3MDcsImp0aSI6ImNiMTBiYmQ5OTMwNDQzNzY5OWUwNGIyNDcyOWNlODY0IiwidXNlcl9pZCI6N30.bB9UiwRrdapCF7G7C4K2d1IrtQUAU0F42SI8up_UqkM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1NDQ0NTU4LCJpYXQiOjE3MTUzNTgxNTgsImp0aSI6Ijc0ZTFkNWE0MjY0ZjQ4NDA5NzRmNmE0NzRmMDVlNGVkIiwidXNlcl9pZCI6N30.ystNjfWghRV1YWLcSzBiGxVdEYQDfHJSNBMV4UYFn4M
 
 {
-    "donation_id": 6,
+    "donation_id": 1,
     "quantity": 1
 }
 
@@ -11,11 +11,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 POST http://localhost:8080/carts/4/update_cart/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1MTExMzA5LCJpYXQiOjE3MTUwMjQ5MDksImp0aSI6IjM1NzkyM2NmZjJmNDRlMjI4ZGZjNDExNjI5ZjRmOTVlIiwidXNlcl9pZCI6N30.sJ6mN54jCy8RsoTcJCTiOMPZ4gkNo-9RhYoxlnF8Z0o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1NDQ0NTU4LCJpYXQiOjE3MTUzNTgxNTgsImp0aSI6Ijc0ZTFkNWE0MjY0ZjQ4NDA5NzRmNmE0NzRmMDVlNGVkIiwidXNlcl9pZCI6N30.ystNjfWghRV1YWLcSzBiGxVdEYQDfHJSNBMV4UYFn4M
 
 {
-  "donation_id": 5,
-  "quantity": 2
+  "donation_id": 1,
+  "quantity": 0
 }
 
 ###

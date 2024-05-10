@@ -70,28 +70,28 @@ class CartViewSet(viewsets.ModelViewSet):
         if user.role != UserRole.CHARITY.value:
             return Response({'error': 'Only charities can update items in the cart'}, status=status.HTTP_403_FORBIDDEN)
 
-        # Retrieve the associated Charity object
-        charity = get_object_or_404(Charity, user=user)
+        cart = get_object_or_404(Cart, id=pk)
+
+        charity = get_object_or_404(Charity, id=cart.charity_id)
 
         donation_id = request.data.get('donation_id')
         quantity_to_update = int(request.data.get('quantity', 0))
 
         try:
-            # Retrieve the carted donation for the specified donation_id
-            carted_donation = CartedDonation.objects.get(cart__charity=charity, donation_id=donation_id)
+        # Retrieve the carted donation for the specified donation_id AND cart
+            carted_donation = CartedDonation.objects.get(cart_id=cart.id, donation_id=donation_id)
 
             if quantity_to_update > 0:
-            
                 carted_donation.quantity = quantity_to_update
                 carted_donation.save()
-
             else:
-            # If requested quantity is 0 or less, remove carted donation
+                # If requested quantity is 0 or less, remove carted donation
                 carted_donation.delete()
 
             cart.refresh_from_db()
             serializer = CartSerializer(cart)
             return Response(serializer.data, status=status.HTTP_200_OK)
+            
         except CartedDonation.DoesNotExist:
             return Response({'error': 'Carted donation not found'}, status=status.HTTP_404_NOT_FOUND)
 
