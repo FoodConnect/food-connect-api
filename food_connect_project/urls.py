@@ -22,10 +22,10 @@ from users.urls import router as users_router
 from cart_order.urls import router as cart_order_router
 
 from dj_rest_auth.jwt_auth import get_refresh_view
-from dj_rest_auth.views import LoginView, LogoutView, UserDetailsView
+from dj_rest_auth.views import LogoutView, UserDetailsView
 from rest_framework_simplejwt.views import TokenVerifyView
 
-from users.views import UserRegistrationAPIView
+from users.views import UserRegistrationAPIView, CustomLoginView
 from cart_order.views import CartViewSet, CartedDonationViewSet, OrderViewSet
 
 urlpatterns = [
@@ -34,7 +34,7 @@ urlpatterns = [
     path('', include(users_router.urls)),
     path('', include(cart_order_router.urls)),
     path('register/', UserRegistrationAPIView.as_view(), name='user-register'),
-    path("login/", LoginView.as_view(), name="rest_login"),
+    path('login/', CustomLoginView.as_view(), name='login'),
     path("logout/", LogoutView.as_view(), name="rest_logout"),
     path("user/", UserDetailsView.as_view(), name="rest_user_details"),
     path('carts/add_to_cart/', CartViewSet.as_view({'post': 'add_to_cart'}), name='add_to_cart'),
