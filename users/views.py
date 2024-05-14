@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from dj_rest_auth.views import LoginView
 
 from .models import User, Charity, Donor
 
@@ -16,6 +17,17 @@ class UserRegistrationAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomLoginView(LoginView):
+    def get_response(self):
+        response = super().get_response()
+
+        user_data = response.data.get('user', {})
+        user_data['role'] = self.user.role  # Add role attribute to user data
+
+        response.data['user'] = user_data
+
+        return response
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
