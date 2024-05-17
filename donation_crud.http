@@ -1,0 +1,19 @@
+POST http://localhost:8080/donations/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0OTQ1NzIxLCJpYXQiOjE3MTQ4NTkzMjEsImp0aSI6ImI4YzM4MmQ4YTA3NTQ3MzU4ZTMxOTkwMzlhYmQ2NTkxIiwidXNlcl9pZCI6Nn0.Ilktbd2nlGpuvTor1VwI_z-Kqz3h12xEK7O3C1DEQL8
+
+{
+    "donor_id": 4,
+    "title": "Cabbage",
+    "image_data": "https://snaped.fns.usda.gov/sites/default/files/seasonal-produce/2018-05/cabbage.jpg",
+    "description": "My cabbages!",
+    "total_inventory": 10,
+    "claimed_inventory": 0,
+    "remaining_inventory": 10,
+    "pick_up_deadline": "2025-05-04 15:30:00",
+    "address": "123 Omg Street",
+    "city": "PleaseWrk",
+    "state": "Illinois",
+    "zipcode": "53729",
+    "is_available": true
+}

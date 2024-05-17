@@ -2,17 +2,17 @@ POST http://localhost:8080/register/
 Content-Type: application/json
 
 {
-    "business_name": "Mano a Mano",
+    "business_name": "LGBTQ+ Center Lake County",
     "role": "charity",
     "ein_number": "123456789",
-    "image_data": "image_url_here",
-    "address": "123 Street",
-    "city": "Waukegan",
+    "image_data": "https://lgbtqlc.com/wp-content/uploads/2022/08/vectored.png",
+    "address": "123 Lake Street",
+    "city": "Grayslake",
     "state": "Illinois",
-    "zipcode": "60085",
+    "zipcode": "60035",
     "phone_number": "1234567890",
-    "username": "mano_a_mano",
-    "email": "mam@example.com",
+    "username": "lgbtq_center",
+    "email": "lgbtq@example.com",
     "password": "omgtest123!" 
 }
 
@@ -22,35 +22,17 @@ POST http://localhost:8080/register/
 Content-Type: application/json
 
 {
-    "role": "charity",
-    "image_data": "image_url_here",
+    "business_name": "Lewis Market",
+    "role": "donor",
+    "ein_number": "123456789",
+    "image_data": "https://lewisfresh.com/wp-content/uploads/2018/07/lewis-fresh-market-logo-500x219.png",
     "address": "123 Street",
     "city": "Waukegan",
     "state": "Illinois",
-    "zipcode": "60085",
-    "phone_number": "1234567890",
-    "username": "test_charity",
-    "email": "test@test.com",
-    "password": "password" 
-}
-
-###
-
-POST http://localhost:8080/register/
-Content-Type: application/json
-
-{
-    "business_name": "Jewel Osco",
-    "role": "donor",
-    "ein_number": "123456789",
-    "image_data": "image_url_here",
-    "address": "123 Street",
-    "city": "Grayslake",
-    "state": "Illinois",
     "zipcode": "60030",
     "phone_number": "1234567890",
-    "username": "jewel_osco",
-    "email": "jewel@example.com",
+    "username": "lewis_market",
+    "email": "lewis@example.com",
     "password": "omgtest123!" 
 }
 
@@ -60,7 +42,7 @@ POST http://localhost:8080/login/
 Content-Type: application/json
 
 {
-    "username": "mano_a_mano",
+    "username": "lgbtq_center",
     "password": "omgtest123!"
 }
 

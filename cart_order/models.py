@@ -18,7 +18,9 @@ class CartedDonation(models.Model):
     id = models.AutoField(primary_key=True)
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1) 
+    quantity = models.IntegerField(default=1)
+    class Meta:
+        unique_together = ('cart', 'donation')
 
 class Order(models.Model):
     id = models.AutoField(primary_key=True)
