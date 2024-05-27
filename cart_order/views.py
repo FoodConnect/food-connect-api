@@ -10,7 +10,7 @@ from users.models import UserRole, User, Charity
 
 from .serializers import CartSerializer, CartedDonationSerializer, OrderSerializer, OrderedDonationSerializer
 
-from .permissions import IsOrderOwnerOrDonationUser
+from .permissions import IsOrderOwnerOrDonationUser, IsCartOwnerOrDonationUser
 
 #for carting/order logic
 from django.http import JsonResponse
@@ -22,9 +22,20 @@ import json
 
 
 class CartViewSet(viewsets.ModelViewSet):
-    queryset = Cart.objects.all()
+    queryset = Cart.objects.none()  # default queryset to avoid DRF assertion error
     serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsCartOwnerOrDonationUser]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            
+            if hasattr(user, 'charity'):
+                return Cart.objects.filter(charity=user.charity)
+            
+            elif hasattr(user, 'donor'):
+                return Cart.objects.filter(carted_donations__donation__donor=user.donor).distinct()
+        return Cart.objects.none()
 
     @action(detail=False, methods=['post'])
     def add_to_cart(self, request):

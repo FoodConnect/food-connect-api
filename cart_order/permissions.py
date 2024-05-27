@@ -11,3 +11,15 @@ class IsOrderOwnerOrDonationUser(permissions.BasePermission):
                 return True
         
         return False
+
+class IsCartOwnerOrDonationUser(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+
+        if hasattr(request.user, 'charity') and request.user.charity == obj.charity:
+            return True
+
+        for carted_donation in obj.carted_donations.all():
+            if hasattr(carted_donation.donation.donor, 'user') and request.user == carted_donation.donation.donor.user:
+                return True
+        
+        return False
