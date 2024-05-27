@@ -10,6 +10,8 @@ from users.models import UserRole, User, Charity
 
 from .serializers import CartSerializer, CartedDonationSerializer, OrderSerializer, OrderedDonationSerializer
 
+from .permissions import IsOrderOwnerOrDonationUser
+
 #for carting/order logic
 from django.http import JsonResponse
 from rest_framework.decorators import action
@@ -26,14 +28,12 @@ class CartViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def add_to_cart(self, request):
-        # Obtain the authenticated user
+       
         user = request.user
 
-        # Ensure the authenticated user has the 'charity' role
         if user.role != UserRole.CHARITY.value:
             return Response({'error': 'Only charities can add items to cart'}, status=status.HTTP_403_FORBIDDEN)
 
-        # Retrieve the associated Charity object
         charity = get_object_or_404(Charity, user=user)
 
         donation_id = request.data.get('donation_id')
@@ -45,10 +45,8 @@ class CartViewSet(viewsets.ModelViewSet):
             if donation.remaining_inventory < quantity:
                 return Response({'error': 'Not enough stock available'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Find or create a cart for the authenticated user
             cart, _ = Cart.objects.get_or_create(charity=charity, status=CartStatus.CARTED.value)
 
-            # Add the donation to the cart
             carted_donation, created = CartedDonation.objects.get_or_create(cart=cart, donation=donation)
             if not created:
                 carted_donation.quantity += int(quantity)
@@ -66,7 +64,6 @@ class CartViewSet(viewsets.ModelViewSet):
         cart = self.get_object()
         user = request.user
 
-        # Ensure the authenticated user has the 'charity' role
         if user.role != UserRole.CHARITY.value:
             return Response({'error': 'Only charities can update items in the cart'}, status=status.HTTP_403_FORBIDDEN)
 
@@ -85,7 +82,6 @@ class CartViewSet(viewsets.ModelViewSet):
                 carted_donation.quantity = quantity_to_update
                 carted_donation.save()
             else:
-                # If requested quantity is 0 or less, remove carted donation
                 carted_donation.delete()
 
             cart.refresh_from_db()
@@ -102,36 +98,27 @@ class CartViewSet(viewsets.ModelViewSet):
         cart = self.get_object()
         user = request.user
 
-        # Ensure the authenticated user has the 'charity' role
         if user.role != UserRole.CHARITY.value:
             return Response({'error': 'Only charities can checkout'}, status=status.HTTP_403_FORBIDDEN)
 
-        # Retrieve the associated Charity object
         charity = get_object_or_404(Charity, user=user)
 
-        # Create an order for the user associated with the cart
         order = Order.objects.create(charity=charity)
 
-        # Initialize an empty list to store donation receipts
         donation_receipts = []
 
-        # Update cart status to "ordered"
         cart.status = CartStatus.ORDERED.value
         cart.save()
 
-        # Iterate through carted donations to create ordered donations
         for carted_donation in cart.carteddonation_set.all():
             donation = carted_donation.donation
             quantity = carted_donation.quantity
 
-            # Create ordered donation for the current carted donation
             OrderedDonation.objects.create(order=order, donation=donation, quantity=quantity)
 
-            # Access donor information through the user attribute of the Donor model
             donor_business_name = donation.donor.user.business_name
             donor_ein_number = donation.donor.user.ein_number
         
-            # Construct donation receipt
             donation_receipt = {
                 'donation_id': donation.id,
                 'donation_title': donation.title,
@@ -144,21 +131,16 @@ class CartViewSet(viewsets.ModelViewSet):
                 'zipcode': donation.zipcode
             }
 
-            # Add donation receipt to the list
             donation_receipts.append(donation_receipt)
 
             print("Donation Receipts List:", donation_receipts)
 
         try:
-            # Convert donation_receipts list to JSON and store it in the receipt field
             order.donation_receipt = json.dumps(donation_receipts)
             order.save()
         except Exception as e:
-            # Print or log the error message for debugging
             print("Error occurred while saving donation receipts:", str(e))
 
-
-        # Reduce remaining_inventory and increase claimed_inventory on the appropriate Donation models
         for ordered_donation in order.ordered_donations.all():
             donation = ordered_donation.donation
             quantity = ordered_donation.quantity
@@ -192,9 +174,20 @@ class CartedDonationViewSet(viewsets.ModelViewSet):
     serializer_class = CartedDonationSerializer
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
+    queryset = Order.objects.none()  # default queryset to avoid DRF assertion error
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOrderOwnerOrDonationUser]
+    # filtering orders based on charity user OR donor that has a donation in the order
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            
+            if hasattr(user, 'charity'):
+                return Order.objects.filter(charity=user.charity)
+            
+            elif hasattr(user, 'donor'):
+                return Order.objects.filter(ordered_donations__donation__donor=user.donor).distinct()
+        return Order.objects.none()
 
     # Retrieve Ordered donation information under specific order ID
     def retrieve(self, request, *args, **kwargs):
