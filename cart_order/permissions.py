@@ -1,25 +1,18 @@
 from rest_framework import permissions
 
-class IsOrderOwnerOrDonationUser(permissions.BasePermission):
+class IsOrderOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-
-        if hasattr(request.user, 'charity') and request.user.charity == obj.charity:
-            return True
+        user = request.user
         
-        for ordered_donation in obj.ordered_donations.all():
-            if hasattr(ordered_donation.donation.donor, 'user') and request.user == ordered_donation.donation.donor.user:
-                return True
+        if hasattr(user, 'charity') and user.charity == obj.charity:
+            return True
         
         return False
 
-class IsCartOwnerOrDonationUser(permissions.BasePermission):
+class IsCartOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
 
         if hasattr(request.user, 'charity') and request.user.charity == obj.charity:
             return True
-
-        for carted_donation in obj.carted_donations.all():
-            if hasattr(carted_donation.donation.donor, 'user') and request.user == carted_donation.donation.donor.user:
-                return True
         
         return False

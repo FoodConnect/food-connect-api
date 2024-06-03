@@ -42,7 +42,7 @@ POST http://localhost:8080/login/
 Content-Type: application/json
 
 {
-    "username": "mano_a_mano",
+    "username": "lgbtq_center",
     "password": "omgtest123!"
 }
 

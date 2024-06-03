@@ -10,7 +10,7 @@ from users.models import UserRole, User, Charity
 
 from .serializers import CartSerializer, CartedDonationSerializer, OrderSerializer, OrderedDonationSerializer
 
-from .permissions import IsOrderOwnerOrDonationUser, IsCartOwnerOrDonationUser
+from .permissions import IsOrderOwner, IsCartOwner
 
 #for carting/order logic
 from django.http import JsonResponse
@@ -24,7 +24,7 @@ import json
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.none()  # default queryset to avoid DRF assertion error
     serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated, IsCartOwnerOrDonationUser]
+    permission_classes = [IsAuthenticated, IsCartOwner]
 
     def get_queryset(self):
         user = self.request.user
@@ -187,17 +187,20 @@ class CartedDonationViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.none()  # default queryset to avoid DRF assertion error
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated, IsOrderOwnerOrDonationUser]
+    permission_classes = [IsAuthenticated, IsOrderOwner]
     # filtering orders based on charity user OR donor that has a donation in the order
     def get_queryset(self):
         user = self.request.user
+
         if user.is_authenticated:
-            
+
             if hasattr(user, 'charity'):
                 return Order.objects.filter(charity=user.charity)
-            
+
             elif hasattr(user, 'donor'):
-                return Order.objects.filter(ordered_donations__donation__donor=user.donor).distinct()
+            
+                return Order.objects.filter(ordered_donations__donation__donor__user=user.donor.user).distinct()
+
         return Order.objects.none()
 
     # Retrieve Ordered donation information under specific order ID
@@ -209,3 +212,17 @@ class OrderViewSet(viewsets.ModelViewSet):
 class OrderedDonationViewSet(viewsets.ModelViewSet):
     queryset = OrderedDonation.objects.all()
     serializer_class = OrderedDonationSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        
+        if hasattr(user, 'donor'):
+            
+            return OrderedDonation.objects.filter(donation__donor__user=user.donor.user).select_related('order')
+
+        elif hasattr(user, 'charity'):
+            
+            return OrderedDonation.objects.filter(order__charity__user=user.charity.user).select_related('order')
+        else:
+            return OrderedDonation.objects.none()
