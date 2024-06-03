@@ -42,6 +42,7 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
             ('role',)
 
 class CharitySerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
       model = Charity
       fields = '__all__'

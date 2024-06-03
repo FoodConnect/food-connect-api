@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Cart, CartedDonation, Order, OrderedDonation
 
-from users.serializers import DonorSerializer
+from users.serializers import DonorSerializer, CharitySerializer, UserSerializer
 from donations.serializers import DonationSerializer
 
 class CartedDonationSerializer(serializers.ModelSerializer):
@@ -42,6 +42,7 @@ class OrderedDonationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
+    charity = CharitySerializer()
     ordered_donations = OrderedDonationSerializer(many=True)
 
     class Meta:
