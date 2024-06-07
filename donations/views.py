@@ -5,9 +5,9 @@ from rest_framework import status
 
 from users.models import Donor, User
 
-from .models import Donation, Category, DonationCategory
+from .models import Donation
 
-from .serializers import DonationSerializer, CategorySerializer, DonationCategorySerializer
+from .serializers import DonationSerializer
 
 class DonationViewSet(viewsets.ModelViewSet):
     queryset = Donation.objects.all()
@@ -34,10 +34,4 @@ class DonationViewSet(viewsets.ModelViewSet):
         self.perform_update(serializer)
         return Response(serializer.data)
 
-class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
 
-class DonationCategoryViewSet(viewsets.ModelViewSet):
-    queryset = DonationCategory.objects.all()
-    serializer_class = DonationCategorySerializer
