@@ -1,10 +1,10 @@
 POST http://localhost:8080/donations/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0OTQ1NzIxLCJpYXQiOjE3MTQ4NTkzMjEsImp0aSI6ImI4YzM4MmQ4YTA3NTQ3MzU4ZTMxOTkwMzlhYmQ2NTkxIiwidXNlcl9pZCI6Nn0.Ilktbd2nlGpuvTor1VwI_z-Kqz3h12xEK7O3C1DEQL8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE3ODc2NTgwLCJpYXQiOjE3MTc3OTAxODAsImp0aSI6IjBiYzM3YjM3ZmIyMjQ5MzI4Mjg0ODA1ZGZjNzQwNjZhIiwidXNlcl9pZCI6OH0.I38dylUDZxR5YwT7MCvhjHLezdyhpCG6g6vr0RMxgCA
 
 {
-    "donor_id": 4,
-    "title": "Cabbage",
+    "donor_id": 8,
+    "title": "Testing 2",
     "image_data": "https://snaped.fns.usda.gov/sites/default/files/seasonal-produce/2018-05/cabbage.jpg",
     "description": "My cabbages!",
     "total_inventory": 10,
@@ -15,5 +15,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "city": "PleaseWrk",
     "state": "Illinois",
     "zipcode": "53729",
-    "is_available": true
+    "is_available": true,
+    "category": "produce"
 }
